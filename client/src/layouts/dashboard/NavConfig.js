@@ -23,7 +23,7 @@ const navConfig = [
   },
   {
     title: 'Documents',
-    path: '/dashboard/blog',
+    path: '/dashboard/certify_document',
     icon: getIcon('eva:file-text-fill'),
   },
   {

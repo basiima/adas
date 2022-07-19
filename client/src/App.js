@@ -6,6 +6,7 @@ import ThemeProvider from './theme';
 import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/chart/BaseOptionChart';
 
+
 // ----------------------------------------------------------------------
 
 export default function App() {
@@ -15,5 +16,6 @@ export default function App() {
       <BaseOptionChartStyle />
       <Router />
     </ThemeProvider>
+    
   );
 }
