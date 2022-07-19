@@ -1,8 +1,8 @@
 module.exports = {
-  HOST: "localhost",
-  USER: "root",
-  PASSWORD: "",
-  DB: "adas_db",
+  HOST: process.env.HOST,
+  USER: process.env.DB_USER,
+  PASSWORD: process.env.PASSWORD,
+  DB: process.env.DATABASE,
   dialect: "mysql",
   pool: {
     max: 5,
