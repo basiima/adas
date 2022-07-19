@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
@@ -17,7 +18,12 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  TextField,
+  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
 } from '@mui/material';
+
+
+
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -131,6 +137,17 @@ export default function User() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
+
   return (
     <Page title="User">
       <Container>
@@ -138,9 +155,95 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Students
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
-            Add Student
-          </Button>
+          
+
+          <div>
+      <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
+        Add Student
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle> Student Details</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please Enter Student Details
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="studentNumber"
+            label="Student Number"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="studentName"
+            label="Student Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+
+<TextField
+            autoFocus
+            margin="dense"
+            id="userName"
+            label="User Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+
+<TextField
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+
+<TextField
+            autoFocus
+            margin="dense"
+            id="phoneNumber"
+            label="Phone Number"
+            type="tel"
+            fullWidth
+            variant="standard"
+          />
+
+<TextField
+            autoFocus
+            margin="dense"
+            id="password"
+            label="Password"
+            type="password"
+            fullWidth
+            variant="standard"
+          />
+
+<TextField
+            autoFocus
+            margin="dense"
+            id="date"
+            label="Date Added"
+            type="date"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Add Student</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+          
+
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
           </Button>
@@ -235,3 +338,5 @@ export default function User() {
     </Page>
   );
 }
+
+
