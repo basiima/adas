@@ -31,12 +31,11 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: 'id', label: 'ID', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'phone', label: 'Phone Number', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -164,7 +163,7 @@ export default function User() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, role, status, company, avatarUrl, email } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -179,6 +178,7 @@ export default function User() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
+                        <TableCell align="left">{company}</TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
@@ -187,11 +187,10 @@ export default function User() {
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
+                          <Label variant="ghost" color={(status === 'inactive' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
