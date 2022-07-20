@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
@@ -20,6 +21,7 @@ import {
   TablePagination,
   TextField,
   Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
+
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -133,6 +135,7 @@ export default function Companies() {
   const filteredUsers = applySortFilter(COMPANYLIST, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
+
 
   const [open, setOpen] = React.useState(false);
 
