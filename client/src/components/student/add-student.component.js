@@ -14,8 +14,11 @@ import {
     TableContainer,
     TablePagination,
     TextField,
-    Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl
+    Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl,
   } from '@mui/material';
+  import Autorenew from '@mui/icons-material/Autorenew';
+  import SaveIcon from '@mui/icons-material/Save';
+
 import StudentService from "./student.service"
 
 class AddStudent extends Component {
@@ -107,6 +110,7 @@ class AddStudent extends Component {
     }
 
     render() {
+        const { data } = this.state
         return(
             <DialogContent>
             <DialogContentText>
@@ -167,8 +171,8 @@ class AddStudent extends Component {
               onChange={this.onChangePhone}
             />
             <DialogActions>
-          <Button>Cancel</Button>
-          <Button onClick={this.saveStudent}>Add Student</Button>
+          <Button variant="contained" onClick={this.newStudent} color="warning" startIcon={<Autorenew/>}>Reset</Button>
+          <Button variant="contained" onClick={this.saveStudent} startIcon={<SaveIcon/>}>Save</Button>
         </DialogActions>
           </DialogContent>
           

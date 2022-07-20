@@ -19,9 +19,9 @@ import {
   TableContainer,
   TablePagination,
   TextField,
-  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl
+  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
-
+import CloseIcon from "@mui/icons-material/Close";
 
 import AddStudent from "../components/student/add-student.component";
 // components
@@ -167,12 +167,24 @@ export default function User() {
       </Button>
       <FormControl>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle> Student Details</DialogTitle>
+        <DialogTitle>
+          <Grid container justify="space-between">
+            <Typography variant="div">
+                Student Details
+            </Typography>
+            <Tooltip title="Close Form">
+            <IconButton onClick={() => setOpen(false)}  style={{marginLeft:'350px'}} variant="container">
+              <CloseIcon color='error'/>
+            </IconButton>
+            </Tooltip>
+          </Grid>
+        </DialogTitle>
           <AddStudent/>
         {/* <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Add Student</Button>
         </DialogActions> */}
+        
       </Dialog></FormControl>
     </div>
           
