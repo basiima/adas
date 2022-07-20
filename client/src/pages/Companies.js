@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
@@ -20,10 +21,8 @@ import {
   TablePagination,
   TextField,
   Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
+
 } from '@mui/material';
-
-
-
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -32,13 +31,13 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+import COMPANYLIST from '../_mock/companies';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', alignRight: false },
-  { id: 'name', label: 'Name', alignRight: false },
+  { id: 'company', label: 'Company Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
   { id: 'phone', label: 'Phone Number', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
@@ -75,7 +74,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Companies() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -96,7 +95,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = COMPANYLIST.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -131,11 +130,12 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - COMPANYLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(COMPANYLIST, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
+
 
   const [open, setOpen] = React.useState(false);
 
@@ -153,39 +153,29 @@ export default function User() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Students
+            Companies
           </Typography>
           
-
           <div>
       <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
-        Add Student
+        Add Company
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle> Student Details</DialogTitle>
+        <DialogTitle> Company Details</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please Enter Student Details
+            Please Enter Company Details
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            id="studentNumber"
-            label="Student Number"
+            id="companyName"
+            label="Company Name"
             type="text"
             fullWidth
             variant="standard"
           />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="studentName"
-            label="Student Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-
+          
 <TextField
             autoFocus
             margin="dense"
@@ -225,7 +215,6 @@ export default function User() {
             fullWidth
             variant="standard"
           />
-
 <TextField
             autoFocus
             margin="dense"
@@ -235,15 +224,16 @@ export default function User() {
             fullWidth
             variant="standard"
           />
+
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add Student</Button>
+          <Button onClick={handleClose}>Add Company</Button>
         </DialogActions>
       </Dialog>
     </div>
           
-
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
           </Button>
@@ -259,14 +249,14 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={COMPANYLIST.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, email } = row;
+                    const { id, name, role, status, company, avatarUrl, isVerified, identifier, email } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -281,19 +271,14 @@ export default function User() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
+                        
+                        <TableCell align="left">{identifier}</TableCell>
                         <TableCell align="left">{company}</TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{role}</TableCell>
+  
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'inactive' && 'error') || 'success'}>
+                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
@@ -327,7 +312,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={COMPANYLIST.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -338,5 +323,3 @@ export default function User() {
     </Page>
   );
 }
-
-
