@@ -19,11 +19,11 @@ import {
   TableContainer,
   TablePagination,
   TextField,
-  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
+  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl
 } from '@mui/material';
 
 
-
+import AddStudent from "../components/student/add-student.component";
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -147,10 +147,13 @@ export default function User() {
     setOpen(false);
   };
   
-
+  // Logic for saving students
+  
+  // End of logic for saving students
   return (
     <Page title="User">
       <Container>
+        
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Students
@@ -158,89 +161,19 @@ export default function User() {
           
 
           <div>
+ 
       <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
         Add Student
       </Button>
+      <FormControl>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle> Student Details</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please Enter Student Details
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="studentNumber"
-            label="Student Number"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="studentName"
-            label="Student Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="userName"
-            label="User Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="phoneNumber"
-            label="Phone Number"
-            type="tel"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="password"
-            label="Password"
-            type="password"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="date"
-            label="Date Added"
-            type="date"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
+          <AddStudent/>
+        {/* <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Add Student</Button>
-        </DialogActions>
-      </Dialog>
+        </DialogActions> */}
+      </Dialog></FormControl>
     </div>
           
 
