@@ -1,6 +1,7 @@
 const db = require("../models");
 const Student = db.student;
 const Op = db.Sequelize.Op;
+var bcrypt = require("bcryptjs");
 
 // Ceate and save a student 
 exports.create = (req, res) => {
@@ -12,13 +13,15 @@ exports.create = (req, res) => {
       return;
     }
     // Create a Student
+    const defaultPassword = "adas-".concat(req.body.student_number);
     const student = {
         id: req.body.id,
         student_name: req.body.student_name,
         student_number: req.body.student_number,
         username: req.body.username,
         email: req.body.email,
-        phone: req.body.phone
+        phone: req.body.phone,
+        password: bcrypt.hashSync(defaultPassword, 8)
     };
     // Save Student in the database
     Student.create(student)
