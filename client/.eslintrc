@@ -35,6 +35,7 @@
     "consistent-return": 1,
     "no-param-reassign": 0,
     "no-use-before-define": 0,
+    "object-shorthand": 0,
     "no-underscore-dangle": 0,
     "react/button-has-type": 1,
     "react/no-children-prop": 0,
