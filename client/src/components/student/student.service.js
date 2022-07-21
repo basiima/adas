@@ -26,7 +26,7 @@ class StudentService {
     }
 
     static findByName(student_name) {
-      return http.get(`/students?title=${student_name}`);
+      return http.get(`/students?student_name=${student_name}`);
     }
     
   }

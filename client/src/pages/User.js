@@ -19,7 +19,7 @@ import {
   TableContainer,
   TablePagination,
   TextField,
-  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl, Grid, IconButton, Tooltip
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -33,6 +33,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
+import StudentList from './StudentList';
 
 // ----------------------------------------------------------------------
 
@@ -146,48 +147,44 @@ export default function User() {
   const handleClose = () => {
     setOpen(false);
   };
-  
-  // Logic for saving students
-  
-  // End of logic for saving students
+
   return (
     <Page title="User">
       <Container>
-        
+
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Students
           </Typography>
-          
+
 
           <div>
- 
-      <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
-        Add Student
-      </Button>
-      <FormControl>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          <Grid container justify="space-between">
-            <Typography variant="div">
-                Student Details
-            </Typography>
-            <Tooltip title="Close Form">
-            <IconButton onClick={() => setOpen(false)}  style={{marginLeft:'350px'}} variant="container">
-              <CloseIcon color='error'/>
-            </IconButton>
-            </Tooltip>
-          </Grid>
-        </DialogTitle>
-          <AddStudent/>
-        {/* <DialogActions>
+
+            <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill" />} >
+              Add Student
+            </Button>
+            <FormControl>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>
+                  <Grid container justify="space-between">
+                    <Typography variant="div">
+                      Student Details
+                    </Typography>
+                    <Tooltip title="Close Form">
+                      <IconButton onClick={() => setOpen(false)} style={{ marginLeft: '350px' }} variant="container">
+                        <CloseIcon color='error' />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </DialogTitle>
+                <AddStudent />
+                {/* <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Add Student</Button>
         </DialogActions> */}
-        
-      </Dialog></FormControl>
-    </div>
-          
+
+              </Dialog></FormControl>
+          </div>
 
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
@@ -195,9 +192,12 @@ export default function User() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar />
 
           <Scrollbar>
+          <TableContainer sx={{ minWidth: 800 }}>
+          <StudentList />
+          {/* <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
@@ -267,16 +267,17 @@ export default function User() {
                 )}
               </Table>
             </TableContainer>
+          </Scrollbar> */}
+          </TableContainer>
           </Scrollbar>
-
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+          //      count={USERLIST.length}
+          // rowsPerPage={rowsPerPage}
+          // page={page}
+          // onPageChange={handleChangePage}
+          // onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
       </Container>
