@@ -11,6 +11,7 @@ import {
   CssBaseline,
   MenuItem,
 } from '@mui/material';
+import DatePicker from 'src/components/TextField';
 
 const onSubmit = async values => {
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -105,13 +106,14 @@ export default function StudentRequest() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Field
+                  {/* <Field
                     fullWidth
                     name="date"
                     component={TextField}
                     label="Date"
                     formControlProps={{ fullWidth: true }}
-                  />
+                  /> */}
+                  <DatePicker/>
                 </Grid>
 
              <Grid item style={{ marginTop: 16 }}>
