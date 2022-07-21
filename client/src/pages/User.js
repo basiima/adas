@@ -19,11 +19,11 @@ import {
   TableContainer,
   TablePagination,
   TextField,
-  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
 
-
-
+import AddStudent from "../components/student/add-student.component";
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -33,6 +33,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
+import StudentList from './StudentList';
 
 // ----------------------------------------------------------------------
 
@@ -146,103 +147,44 @@ export default function User() {
   const handleClose = () => {
     setOpen(false);
   };
-  
 
   return (
     <Page title="User">
       <Container>
+
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Students
           </Typography>
-          
+
 
           <div>
-      <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
-        Add Student
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle> Student Details</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please Enter Student Details
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="studentNumber"
-            label="Student Number"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="studentName"
-            label="Student Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
 
-<TextField
-            autoFocus
-            margin="dense"
-            id="userName"
-            label="User Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="phoneNumber"
-            label="Phone Number"
-            type="tel"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="password"
-            label="Password"
-            type="password"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="date"
-            label="Date Added"
-            type="date"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
+            <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill" />} >
+              Add Student
+            </Button>
+            <FormControl>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>
+                  <Grid container justify="space-between">
+                    <Typography variant="div">
+                      Student Details
+                    </Typography>
+                    <Tooltip title="Close Form">
+                      <IconButton onClick={() => setOpen(false)} style={{ marginLeft: '350px' }} variant="container">
+                        <CloseIcon color='error' />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </DialogTitle>
+                <AddStudent />
+                {/* <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Add Student</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-          
+        </DialogActions> */}
+
+              </Dialog></FormControl>
+          </div>
 
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
@@ -250,9 +192,12 @@ export default function User() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar />
 
           <Scrollbar>
+          <TableContainer sx={{ minWidth: 800 }}>
+          <StudentList />
+          {/* <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
@@ -322,16 +267,17 @@ export default function User() {
                 )}
               </Table>
             </TableContainer>
+          </Scrollbar> */}
+          </TableContainer>
           </Scrollbar>
-
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+          //      count={USERLIST.length}
+          // rowsPerPage={rowsPerPage}
+          // page={page}
+          // onPageChange={handleChangePage}
+          // onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
       </Container>

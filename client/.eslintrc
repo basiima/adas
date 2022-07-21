@@ -71,6 +71,7 @@
         "object": true,
         "array": false
       }
-    ]
+    ],
+    "camelcase": "off"
   }
 }
