@@ -20,7 +20,7 @@ import {
   TableContainer,
   TablePagination,
   TextField,
-  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 
 } from '@mui/material';
 // components
@@ -146,7 +146,7 @@ export default function Companies() {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
 
   return (
     <Page title="User">
@@ -155,85 +155,85 @@ export default function Companies() {
           <Typography variant="h4" gutterBottom>
             Companies
           </Typography>
-          
+
           <div>
-      <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
-        Add Company
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle> Company Details</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please Enter Company Details
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="companyName"
-            label="Company Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          
-<TextField
-            autoFocus
-            margin="dense"
-            id="userName"
-            label="User Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
+            <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill" />} >
+              Add Company
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle> Company Details</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Please Enter Company Details
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="companyName"
+                  label="Company Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                />
 
-<TextField
-            autoFocus
-            margin="dense"
-            id="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="userName"
+                  label="User Name"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                />
 
-<TextField
-            autoFocus
-            margin="dense"
-            id="phoneNumber"
-            label="Phone Number"
-            type="tel"
-            fullWidth
-            variant="standard"
-          />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  fullWidth
+                  variant="standard"
+                />
 
-<TextField
-            autoFocus
-            margin="dense"
-            id="password"
-            label="Password"
-            type="password"
-            fullWidth
-            variant="standard"
-          />
-<TextField
-            autoFocus
-            margin="dense"
-            id="date"
-            label="Date Added"
-            type="date"
-            fullWidth
-            variant="standard"
-          />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="phoneNumber"
+                  label="Phone Number"
+                  type="tel"
+                  fullWidth
+                  variant="standard"
+                />
+
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="password"
+                  label="Password"
+                  type="password"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="date"
+                  label="Date Added"
+                  type="date"
+                  fullWidth
+                  variant="standard"
+                />
 
 
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add Company</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-          
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleClose}>Add Company</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
           </Button>
@@ -271,12 +271,12 @@ export default function Companies() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        
+
                         <TableCell align="left">{identifier}</TableCell>
                         <TableCell align="left">{company}</TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{role}</TableCell>
-  
+
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
