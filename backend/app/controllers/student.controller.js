@@ -37,25 +37,28 @@ exports.create = (req, res) => {
       });
 
     // Send Email containing default password
+    async function sendMail(){
       // SMTP config
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      auth: {
-        user: "edmond.stoltenberg@ethereal.email",
-        pass: "KzrUpYrVsuTFhePXza",
-      },
-    });
-      // Send Email
-    let info = await transporter.sendMail({
-      from: '"ADAS Admin" <admin@adas.com>',
-      to: req.body.email, // Student's email address
-      subject: "Welcome Message!",
-      text: "Welcome to the Academic Document Authenticity System (ADAS). Please login using the password ".concat(defaultPassword),
-      html: "Welcome to the Academic Document Authenticity System (ADAS). Please login using the password ".concat(defaultPassword),
-    });
-    
-    console.log("View email: %s", nodemailer.getTestMessageUrl(info)); // URL to preview email
+      const transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,
+        auth: {
+          user: "edmond.stoltenberg@ethereal.email",
+          pass: "KzrUpYrVsuTFhePXza",
+        },
+      });
+        // Send Email
+      let info = await transporter.sendMail({
+        from: '"ADAS Admin" <admin@adas.com>',
+        to: req.body.email, // Student's email address
+        subject: "Welcome Message!",
+        text: "Welcome to the Academic Document Authenticity System (ADAS). Please login using the password ".concat(defaultPassword),
+        html: "Welcome to the Academic Document Authenticity System (ADAS). Please login using the password ".concat(defaultPassword),
+      });
+
+      console.log("View email: %s", nodemailer.getTestMessageUrl(info)); // URL to preview email
+    }
+    sendMail().catch(console.error);
 
   };
 
