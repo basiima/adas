@@ -149,7 +149,7 @@ export default function User() {
   };
 
   return (
-    <Page title="User">
+    <Page title="Students">
       <Container>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>

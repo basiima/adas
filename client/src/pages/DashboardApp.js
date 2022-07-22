@@ -27,24 +27,25 @@ export default function DashboardApp() {
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          ACADEMIC DOCUMENT AUTHENTICATION SYSTEM
         </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Students on Platform" total={714000} icon={'ant-design:team-outlined'} />
+
+            <AppWidgetSummary title="Students on Platform" total={70} icon={'eva:people-fill'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Companies on Platform" total={1352831} color="info" icon={'ant-design:bank-filled'} />
+            <AppWidgetSummary title="Companies on Platform" total={25} color="info" icon={'eva:shopping-bag-fill'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Documents Verified" total={1723315} color="warning" icon={'ant-design:like-filled'} />
+            <AppWidgetSummary title="Documents Verified" total={100} color="warning" icon={'eva:file-text-fill'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Pending Verifications" total={234} color="error" icon={'ant-design:hourglass-filled'} />
+            <AppWidgetSummary title="Pending Verifications" total={35} color="error" icon={'eva:file-text-fill'} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

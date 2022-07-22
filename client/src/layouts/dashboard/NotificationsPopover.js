@@ -38,15 +38,15 @@ const NOTIFICATIONS = [
     createdAt: set(new Date(), { hours: 10, minutes: 30 }),
     isUnRead: true,
   },
-  {
-    id: faker.datatype.uuid(),
-    title: faker.name.findName(),
-    description: 'answered to your comment on the Minimal',
-    avatar: '/static/mock-images/avatars/avatar_2.jpg',
-    type: 'friend_interactive',
-    createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: true,
-  },
+  // {
+    // id: faker.datatype.uuid(),
+   // title: faker.name.findName(),
+   // description: 'answered to your comment on the Minimal',
+    // avatar: '/static/mock-images/avatars/avatar_2.jpg',
+   // type: 'friend_interactive',
+    // createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
+    // isUnRead: true,
+ // },
   {
     id: faker.datatype.uuid(),
     title: 'You have new message',
@@ -104,17 +104,6 @@ export default function NotificationsPopover() {
 
   return (
     <>
-      <IconButton
-        ref={anchorRef}
-        color={open ? 'primary' : 'default'}
-        onClick={handleOpen}
-        sx={{ width: 40, height: 40 }}
-      >
-        <Badge badgeContent={totalUnRead} color="error">
-          <Iconify icon="eva:bell-fill" width={20} height={20} />
-        </Badge>
-      </IconButton>
-
       <MenuPopover
         open={Boolean(open)}
         anchorEl={open}

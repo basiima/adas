@@ -151,7 +151,7 @@ export default function Companies() {
 
 
   return (
-    <Page title="User">
+    <Page title="Companies">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
