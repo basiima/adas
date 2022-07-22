@@ -16,8 +16,8 @@ import {
     TextField,
     Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle, FormControl,
   } from '@mui/material';
-  import Autorenew from '@mui/icons-material/Autorenew';
-  import SaveIcon from '@mui/icons-material/Save';
+import Autorenew from '@mui/icons-material/Autorenew';
+import SaveIcon from '@mui/icons-material/Save';
 
 import StudentService from "./student.service"
 
@@ -39,8 +39,6 @@ class AddStudent extends Component {
             email: "",
             phone: ""
         };
-
-
     }
 
     onChangeName(e) {
@@ -89,7 +87,7 @@ class AddStudent extends Component {
                     student_number: response.data.student_number,
                     username: response.data.username,
                     email: response.data.email,
-                    phone: response.data.phone
+                    phone: response.data.phone,
                 });
                 console.log(response.data);
             })
@@ -113,69 +111,70 @@ class AddStudent extends Component {
         const { data } = this.state
         return(
             <DialogContent>
-            <DialogContentText>
-              Please Enter Student Details
-            </DialogContentText>
-            
-            <TextField
-              margin="dense"
-              id="studentNumber"
-              label="Student Number"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={this.state.student_number}
-              onChange={this.onChangeStudentNumber}
-            />
-            <TextField
-              margin="dense"
-              id="studentName"
-              label="Student Name"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={this.state.student_name}
-              onChange={this.onChangeName}
-            />
-  
-  <TextField
-              margin="dense"
-              id="userName"
-              label="User Name"
-              type="text"
-              fullWidth
-              variant="standard"
-              value={this.state.username}
-              onChange={this.onChangeUserName}
-            />
-  
-  <TextField
-              margin="dense"
-              id="email"
-              label="Email Address"
-              type="email"
-              fullWidth
-              variant="standard"
-              value={this.state.email}
-              onChange={this.onChangeEmail}
-            />
-  
-  <TextField
-              margin="dense"
-              id="phoneNumber"
-              label="Phone Number"
-              type="tel"
-              fullWidth
-              variant="standard"
-              value={this.state.phone}
-              onChange={this.onChangePhone}
-            />
-            <DialogActions>
-          <Button variant="contained" onClick={this.newStudent} color="warning" startIcon={<Autorenew/>}>Reset</Button>
-          <Button variant="contained" onClick={this.saveStudent} startIcon={<SaveIcon/>}>Save</Button>
-        </DialogActions>
-          </DialogContent>
-          
+                <DialogContentText>
+                Please Enter Student Details
+                </DialogContentText>
+                
+                <TextField
+                margin="dense"
+                id="studentNumber"
+                label="Student Number"
+                type="text"
+                fullWidth
+                variant="standard"
+                value={this.state.student_number}
+                onChange={this.onChangeStudentNumber}
+                />
+                
+                <TextField
+                margin="dense"
+                id="studentName"
+                label="Student Name"
+                type="text"
+                fullWidth
+                variant="standard"
+                value={this.state.student_name}
+                onChange={this.onChangeName}
+                />
+    
+                <TextField
+                margin="dense"
+                id="userName"
+                label="User Name"
+                type="text"
+                fullWidth
+                variant="standard"
+                value={this.state.username}
+                onChange={this.onChangeUserName}
+                />
+    
+                <TextField
+                margin="dense"
+                id="email"
+                label="Email Address"
+                type="email"
+                fullWidth
+                variant="standard"
+                value={this.state.email}
+                onChange={this.onChangeEmail}
+                />
+    
+                <TextField
+                margin="dense"
+                id="phoneNumber"
+                label="Phone Number"
+                type="tel"
+                fullWidth
+                variant="standard"
+                value={this.state.phone}
+                onChange={this.onChangePhone}
+                />
+                
+                <DialogActions>
+                    <Button variant="contained" onClick={this.newStudent} color="warning" startIcon={<Autorenew/>}>Reset</Button>
+                    <Button variant="contained" onClick={this.saveStudent} startIcon={<SaveIcon/>}>Save</Button>
+                </DialogActions>
+            </DialogContent>          
         );
     }
 }

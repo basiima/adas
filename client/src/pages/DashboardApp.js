@@ -32,6 +32,7 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
+
             <AppWidgetSummary title="Students on Platform" total={70} icon={'eva:people-fill'} />
           </Grid>
 

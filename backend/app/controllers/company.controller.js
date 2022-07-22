@@ -1,53 +1,48 @@
 const db = require("../models");
-const Student = db.student;
+const Company = db.company;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer"); // Require the Nodemailer package
 
-// Ceate and save a student 
+// Ceate and save a company 
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body.student_name) {
+    if (!req.body.company_name) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
       return;
     }
-    // Create a Student
-    const defaultPassword = "adas-".concat(req.body.student_number);
-    const student = {
+    // Create a Company
+    const defaultPassword = "adas-".concat(req.body.username);
+    const company = {
         id: req.body.id,
-        student_name: req.body.student_name,
-        student_number: req.body.student_number,
+        company_name: req.body.company_name,
+        company_email: req.body.company_email,
         username: req.body.username,
-        email: req.body.email,
-        phone: req.body.phone,
         password: bcrypt.hashSync(defaultPassword, 8)
     };
-    // Save Student in the database
-    Student.create(student)
+    // Save Company in the database
+    Company.create(company)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the Student."
+            err.message || "Some error occurred while creating the Company."
         });
       });
 
     // Send Email containing default password
     async function sendMail(){
-      // Transporter object
+      // SMTP config
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: "smtp.ethereal.email",
+        port: 587,
         auth: {
-          type: 'OAuth2',
-          user: process.env.MAIL_USERNAME,
-          pass: process.env.MAIL_PASSWORD,
-          clientId: process.env.OAUTH_CLIENTID,
-          clientSecret: process.env.OAUTH_CLIENT_SECRET,
-          refreshToken: process.env.OAUTH_REFRESH_TOKEN
+          user: "edmond.stoltenberg@ethereal.email",
+          pass: "KzrUpYrVsuTFhePXza",
         },
       });
         // Send Email
@@ -65,103 +60,103 @@ exports.create = (req, res) => {
 
   };
 
-// Retrieve all students
+// Retrieve all companies
 exports.findAll = (req, res) => {
-    const student_name = req.query.student_name;
-    var condition = student_name ? { student_name: { [Op.like]: `%${student_name}%` } } : null;
-    Student.findAll({ where: condition })
+    const company_name = req.query.company_name;
+    var condition = company_name ? { company_name: { [Op.like]: `%${company_name}%` } } : null;
+    Company.findAll({ where: condition })
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving students."
+            err.message || "Some error occurred while retrieving companies."
         });
       });
   };
 
-// Return a student of a specified id   
+// Return a company of a specified id   
 exports.findOne = (req, res) => {
     const id = req.params.id;
-    Student.findByPk(id)
+    Company.findByPk(id)
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Student with id=${id}.`
+            message: `Cannot find Company with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Student with id=" + id
+          message: "Error retrieving Company with id=" + id
         });
       });
   };
 
-// Update a student of a specified is
+// Update a company of a specified id
 exports.update = (req, res) => {
     const id = req.params.id;
-    Student.update(req.body, {
+    Company.update(req.body, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Student was updated successfully."
+            message: "Company was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update Student with id=${id}. Maybe Student was not found or req.body is empty!`
+            message: `Cannot update Company with id=${id}. Maybe Company was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating Student with id=" + id
+          message: "Error updating Company with id=" + id
         });
       });
   };
 
-// Delete a student of a specifiied id 
+// Delete a company of a specifiied id 
 exports.delete = (req, res) => {
     const id = req.params.id;
-    Student.destroy({
+    Company.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Student was deleted successfully!"
+            message: "Company was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Student with id=${id}. Maybe Student was not found!`
+            message: `Cannot delete Company with id=${id}. Maybe Company was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Student with id=" + id
+          message: "Could not delete Company with id=" + id
         });
       });
   };
 
-// Delete all specified students
+// Delete all specified companies
 exports.deleteAll = (req, res) => {
-    Student.destroy({
+    Company.destroy({
       where: {},
       truncate: false
     })
       .then(nums => {
-        res.send({ message: `${nums} Students were deleted successfully!` });
+        res.send({ message: `${nums} Companies were deleted successfully!` });
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while removing all students."
+            err.message || "Some error occurred while removing all companies."
         });
       });
   };
