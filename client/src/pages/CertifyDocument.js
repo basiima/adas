@@ -1,58 +1,130 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-// material
-import { Grid, Button, Container, Stack, Typography ,FormControl, TextField} from '@mui/material';
-// components
-import Page from '../components/Page';
-import Iconify from '../components/Iconify';
 
+import React, { Component } from "react";
+import Container from  '@mui/material';
+import CertifyDocumentService from "../services/certifyDocument.service";
 
+export default class CertifyDocument extends Component {
+  constructor(props) {
+    super(props);
+    this.selectFile = this.selectFile.bind(this);
+    this.upload = this.upload.bind(this);
 
+    this.state = {
+      selectedFiles: undefined,
+      currentFile: undefined,
+      progress: 0,
+      message: "",
 
+      fileInfos: [],
+    };
+  }
 
-// ----------------------------------------------------------------------
+  componentDidMount() {
+    CertifyDocumentService.getFiles().then((response) => {
+      this.setState({
+        fileInfos: response.data,
+      });
+    });
+  }
 
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' },
-];
+  selectFile(event) {
+    this.setState({
+      selectedFiles: event.target.files,
+    });
+  }
 
-// ----------------------------------------------------------------------
+  upload() {
+    const currentFile = this.state.selectedFiles[0];
+    console.log(this.state.selectedFiles)
+    this.setState({
+      progress: 0,
+      currentFile: currentFile,
+    });
 
-export default function CertifyDocuments() {
-  return (
-    <Page title="Dashboard: Blog">
-      <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Certify Documents 
-          </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:eye-fill" />}>
-            View Documents
-          </Button>
-        </Stack>
-        </Container>
+    CertifyDocumentService.upload(currentFile, (event) => {
+      this.setState({
+        progress: Math.round((100 * event.loaded) / event.total),
+      });
+    })
+      .then((response) => {
+        this.setState({
+          message: response.data.message,
+        });
+        return CertifyDocumentService.getFiles();
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+      })
+      .catch(() => {
+        this.setState({
+          progress: 0,
+          message: "Could not upload the file!",
+          currentFile: undefined,
+        });
+      });
 
+    this.setState({
+      selectedFiles: undefined,
+    });
+  }
 
+  render() {
+    const {
+      selectedFiles,
+      currentFile,
+      progress,
+      message,
+      fileInfos,
+    } = this.state;
 
-        
+    return (
+      <div>
+        {currentFile && (
+          <div className="progress">
+            <div
+              className="progress-bar progress-bar-info progress-bar-striped"
+              role="progressbar"
+              aria-valuenow={progress}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style={{ width: `${progress} %` }}
+            >
+              {progress}%
+            </div>
+          </div>
+        )}
 
-      <Container maxWidth="sm">
-        <FormControl >
-        <label htmlFor= 'a'>
-          Select document(s) to hash:
-        <br />
-          <input type="file" />
+        <label className="btn btn-default">
+          <input type="file" onChange={this.selectFile} />
         </label>
-        <br />
-        <TextField id="file_name" label="File Name:" variant="standard" disabled/>
-        <br />
-        <Button variant="contained">Certify</Button>
-      </FormControl>
-      </Container>
-    </Page>
-  );
-}
 
+        <button
+          className="btn btn-primary"
+          disabled={!selectedFiles}
+          onClick={this.upload}
+        >
+          Upload
+        </button>
+
+        <div className="alert alert-light" role="alert">
+          {message}
+        </div>
+
+        <div className="card">
+          <div className="card-header">List of Files</div>
+          <ul className="list-group list-group-flush">
+            {fileInfos &&
+              fileInfos.map((file, index) => (
+                <li className="list-group-item" key={index}>
+                  <a href={file.url}>{file.name}</a>
+                </li>
+              ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+}
 

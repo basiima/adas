@@ -18,28 +18,19 @@ const navConfig = [
   },
   {
     title: 'Companies',
-    path: '/dashboard/products',
+    path: '/dashboard/companies',
     icon: getIcon('eva:shopping-bag-fill'),
   },
   {
     title: 'Documents',
     path: '/dashboard/certify_document',
+   
     icon: getIcon('eva:file-text-fill'),
   },
   {
-    title: 'login',
+    title: 'Logout',
     path: '/login',
-    icon: getIcon('eva:lock-fill'),
-  },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill'),
+    icon: getIcon('carbon:logout'),
   },
 ];
 

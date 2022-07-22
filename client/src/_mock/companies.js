@@ -1,10 +1,9 @@
-
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-const blog = [...Array(24)].map((_, index) => ({
+const companies = [...Array(24)].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: `/static/mock-images/avatars/avatar_${index + 1}.jpg`,
   name: faker.name.findName(),
@@ -15,5 +14,4 @@ const blog = [...Array(24)].map((_, index) => ({
   role: faker.phone.imei()
 }));
 
-export default blog;
-
+export default companies;

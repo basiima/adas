@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
@@ -22,8 +23,6 @@ import {
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
 import CloseIcon from "@mui/icons-material/Close";
-
-import AddStudent from "../components/student/add-student.component";
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -32,14 +31,15 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
-import StudentList from './StudentList';
+import COMPANYLIST from '../_mock/companies';
+import AddCompany from '../components/company/add-company.component';
+import CompanyList from './CompanyList';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', alignRight: false },
-  { id: 'name', label: 'Name', alignRight: false },
+  { id: 'company', label: 'Company Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
   { id: 'phone', label: 'Phone Number', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
@@ -76,7 +76,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Companies() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -97,7 +97,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = COMPANYLIST.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -132,11 +132,12 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - COMPANYLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(COMPANYLIST, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
+
 
   const [open, setOpen] = React.useState(false);
 
@@ -148,27 +149,25 @@ export default function User() {
     setOpen(false);
   };
 
-  return (
-    <Page title="Students">
-      <Container>
 
+  return (
+    <Page title="Companies">
+      <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Students
+            Companies
           </Typography>
 
-
           <div>
-
             <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill" />} >
-              Add Student
+              Add Company
             </Button>
             <FormControl>
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>
                   <Grid container justify="space-between">
                     <Typography variant="div">
-                      Student Details
+                      Company Details
                     </Typography>
                     <Tooltip title="Close Form">
                       <IconButton onClick={() => setOpen(false)} style={{ marginLeft: '350px' }} variant="container">
@@ -177,7 +176,7 @@ export default function User() {
                     </Tooltip>
                   </Grid>
                 </DialogTitle>
-                <AddStudent />
+                <AddCompany/>
                 {/* <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Add Student</Button>
@@ -192,26 +191,24 @@ export default function User() {
         </Stack>
 
         <Card>
-          <UserListToolbar />
+          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          <Scrollbar>
-          <TableContainer sx={{ minWidth: 800 }}>
-          <StudentList />
           {/* <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
+            <TableContainer sx={{ minWidth: 800 }}> */}
+              <CompanyList/>
+              {/* <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={COMPANYLIST.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, email } = row;
+                    const { id, name, role, status, company, avatarUrl, isVerified, identifier, email } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -226,19 +223,14 @@ export default function User() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
+
+                        <TableCell align="left">{identifier}</TableCell>
                         <TableCell align="left">{company}</TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{role}</TableCell>
+
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'inactive' && 'error') || 'success'}>
+                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell>
@@ -265,24 +257,21 @@ export default function User() {
                     </TableRow>
                   </TableBody>
                 )}
-              </Table>
-            </TableContainer>
+              </Table> */}
+            {/* </TableContainer>
           </Scrollbar> */}
-          </TableContainer>
-          </Scrollbar>
-          <TablePagination
+
+          {/* <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-          //      count={USERLIST.length}
-          // rowsPerPage={rowsPerPage}
-          // page={page}
-          // onPageChange={handleChangePage}
-          // onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+            count={COMPANYLIST.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          /> */}
         </Card>
       </Container>
     </Page>
   );
 }
-
-
