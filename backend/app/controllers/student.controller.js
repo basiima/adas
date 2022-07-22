@@ -38,13 +38,16 @@ exports.create = (req, res) => {
 
     // Send Email containing default password
     async function sendMail(){
-      // SMTP config
+      // Transporter object
       const transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
+        service: 'gmail',
         auth: {
-          user: "edmond.stoltenberg@ethereal.email",
-          pass: "KzrUpYrVsuTFhePXza",
+          type: 'OAuth2',
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
+          clientId: process.env.OAUTH_CLIENTID,
+          clientSecret: process.env.OAUTH_CLIENT_SECRET,
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN
         },
       });
         // Send Email
