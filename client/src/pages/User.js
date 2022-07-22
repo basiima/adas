@@ -151,7 +151,7 @@ export default function User() {
   
   // End of logic for saving students
   return (
-    <Page title="User">
+    <Page title="Students">
       <Container>
         
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
