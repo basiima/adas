@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Container from  '@mui/material';
 import CertifyDocumentService from "../services/certifyDocument.service";
 
 export default class CertifyDocument extends Component {
@@ -99,7 +100,7 @@ export default class CertifyDocument extends Component {
         </label>
 
         <button
-          className="btn btn-success"
+          className="btn btn-primary"
           disabled={!selectedFiles}
           onClick={this.upload}
         >
