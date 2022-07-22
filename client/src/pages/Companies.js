@@ -20,9 +20,9 @@ import {
   TableContainer,
   TablePagination,
   TextField,
-  Dialog, DialogActions, DialogContent,DialogContentText,DialogTitle
-
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
+import CloseIcon from "@mui/icons-material/Close";
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -32,6 +32,8 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import COMPANYLIST from '../_mock/companies';
+import AddCompany from '../components/company/add-company.component';
+import CompanyList from './CompanyList';
 
 // ----------------------------------------------------------------------
 
@@ -146,7 +148,7 @@ export default function Companies() {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
 
   return (
     <Page title="User">
@@ -155,85 +157,34 @@ export default function Companies() {
           <Typography variant="h4" gutterBottom>
             Companies
           </Typography>
-          
+
           <div>
-      <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill"/>} >
-        Add Company
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle> Company Details</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please Enter Company Details
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="companyName"
-            label="Company Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          
-<TextField
-            autoFocus
-            margin="dense"
-            id="userName"
-            label="User Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="phoneNumber"
-            label="Phone Number"
-            type="tel"
-            fullWidth
-            variant="standard"
-          />
-
-<TextField
-            autoFocus
-            margin="dense"
-            id="password"
-            label="Password"
-            type="password"
-            fullWidth
-            variant="standard"
-          />
-<TextField
-            autoFocus
-            margin="dense"
-            id="date"
-            label="Date Added"
-            type="date"
-            fullWidth
-            variant="standard"
-          />
-
-
-        </DialogContent>
-        <DialogActions>
+            <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill" />} >
+              Add Company
+            </Button>
+            <FormControl>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>
+                  <Grid container justify="space-between">
+                    <Typography variant="div">
+                      Company Details
+                    </Typography>
+                    <Tooltip title="Close Form">
+                      <IconButton onClick={() => setOpen(false)} style={{ marginLeft: '350px' }} variant="container">
+                        <CloseIcon color='error' />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </DialogTitle>
+                <AddCompany/>
+                {/* <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add Company</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-          
+          <Button onClick={handleClose}>Add Student</Button>
+        </DialogActions> */}
+
+              </Dialog></FormControl>
+          </div>
+
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
           </Button>
@@ -242,9 +193,10 @@ export default function Companies() {
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
+          {/* <Scrollbar>
+            <TableContainer sx={{ minWidth: 800 }}> */}
+              <CompanyList/>
+              {/* <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
@@ -271,12 +223,12 @@ export default function Companies() {
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        
+
                         <TableCell align="left">{identifier}</TableCell>
                         <TableCell align="left">{company}</TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{role}</TableCell>
-  
+
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
@@ -305,11 +257,11 @@ export default function Companies() {
                     </TableRow>
                   </TableBody>
                 )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+              </Table> */}
+            {/* </TableContainer>
+          </Scrollbar> */}
 
-          <TablePagination
+          {/* <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={COMPANYLIST.length}
@@ -317,7 +269,7 @@ export default function Companies() {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> */}
         </Card>
       </Container>
     </Page>
