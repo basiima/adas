@@ -32,20 +32,19 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-
-            <AppWidgetSummary title="Students on Platform" total={70} icon={'eva:people-fill'} />
+            <AppWidgetSummary title="Students on Platform" total={0} icon={'ant-design:team-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Companies on Platform" total={25} color="info" icon={'eva:shopping-bag-fill'} />
+            <AppWidgetSummary title="Companies on Platform" total={0} color="info" icon={'ant-design:bank-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Documents Verified" total={100} color="warning" icon={'eva:file-text-fill'} />
+            <AppWidgetSummary title="Documents Verified" total={0} color="warning" icon={'ant-design:like-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Pending Verifications" total={35} color="error" icon={'eva:file-text-fill'} />
+            <AppWidgetSummary title="Pending Verifications" total={0} color="error" icon={'ant-design:hourglass-filled'} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
@@ -67,19 +66,19 @@ export default function DashboardApp() {
               ]}
               chartData={[
                 {
-                  name: 'University A',
+                  name: 'Diploma',
                   type: 'column',
                   fill: 'solid',
                   data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
                 },
                 {
-                  name: 'University B',
+                  name: 'Bachelors',
                   type: 'area',
                   fill: 'gradient',
                   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
                 },
                 {
-                  name: 'Univeristy C',
+                  name: 'Certificate',
                   type: 'line',
                   fill: 'solid',
                   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
@@ -92,10 +91,10 @@ export default function DashboardApp() {
             <AppCurrentVisits
               title="Top Companies"
               chartData={[
-                { label: 'MTN', value: 4344 },
-                { label: 'URA', value: 5435 },
-                { label: 'ADAS', value: 1443 },
-                { label: 'YELLOW PAGE', value: 4443 },
+                { label: 'MTN', value: 43 },
+                { label: 'URA', value: 54 },
+                { label: 'ADAS', value: 14 },
+                { label: 'YELLOW PAGE', value: 44 },
               ]}
               chartColors={[
                 theme.palette.primary.main,
@@ -106,7 +105,7 @@ export default function DashboardApp() {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppConversionRates
               title="Conversion Rates"
               subheader="(+43%) than last year"
@@ -123,9 +122,9 @@ export default function DashboardApp() {
                 { label: 'United Kingdom', value: 1380 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
               title="Top Documents by Institution"
               chartLabels={['Masters', 'PHD', 'Certificate', 'Bachelors', 'CISA', 'CMAS']}
@@ -136,9 +135,9 @@ export default function DashboardApp() {
               ]}
               chartColors={[...Array(6)].map(() => theme.palette.text.secondary)}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="News Update"
               list={[...Array(5)].map((_, index) => ({
@@ -149,9 +148,9 @@ export default function DashboardApp() {
                 postedAt: faker.date.recent(),
               }))}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Pending Verifications"
               list={[...Array(5)].map((_, index) => ({
@@ -167,7 +166,7 @@ export default function DashboardApp() {
                 time: faker.date.past(),
               }))}
             />
-          </Grid>
+          </Grid> */}
 
           {/* <Grid item xs={12} md={6} lg={4}>
             <AppTrafficBySite

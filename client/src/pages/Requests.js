@@ -40,7 +40,7 @@ export default function Requests() {
           }
         />
         <div>
-        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument" startIcon={<Iconify icon="eva:plus-fill" />}>
             Certify
           </Button>
         </div>
@@ -67,7 +67,7 @@ export default function Requests() {
           }
         />
         <div>
-        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument" startIcon={<Iconify icon="eva:plus-fill" />}>
             Certify
           </Button>
         </div>
@@ -94,7 +94,7 @@ export default function Requests() {
           }
         />
         <div>
-        <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument" startIcon={<Iconify icon="eva:plus-fill" />}>
             Certify
           </Button>
         </div>
