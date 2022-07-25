@@ -1,8 +1,7 @@
 import * as React from 'react';
-
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -22,27 +21,30 @@ import {
   TextField,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import CloseIcon from "@mui/icons-material/Close";
+import StudentService from "../components/student/student.service";
+import AddStudent from "../components/student/AddStudent";
+
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-// mock
-import COMPANYLIST from '../_mock/companies';
-import AddCompany from '../components/company/add-company.component';
-import CompanyList from './CompanyList';
+import { UserListHead, StudentListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import CompanyListToolbar from '../sections/@dashboard/products/CompanyListToolbar'
+import AddCompany from '../components/company/AddCompany';
+import CompanyService from "../components/company/company.service";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', alignRight: false },
-  { id: 'company', label: 'Company Name', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
-  { id: 'phone', label: 'Phone Number', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'company_name', label: 'Company Name', alignRight: false },
+  { id: 'company_email', label: 'Company Email', alignRight: false },
+  { id: 'username', label: 'User Name', alignRight: false },
+  { id: 'action', label: 'Action', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -71,23 +73,43 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.company_name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Companies() {
+export default function Student() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('company_name');
 
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [companies, setCompanies] = useState([]);
+
+  // Trigger retrieve students function on load up
+  useEffect(()=>{
+    // setInterval(() => {
+     retrieveStudents();
+    // }, 50000);
+  });
+
+  // Send request to api to retrieve student records from the database
+  const retrieveStudents = () => {
+    CompanyService.getAll()
+      .then(response => {
+        setCompanies(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -97,18 +119,18 @@ export default function Companies() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = COMPANYLIST.map((n) => n.name);
+      const newSelecteds = companies.map((n) => n.company_name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, company_name) => {
+    const selectedIndex = selected.indexOf(company_name);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, company_name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -132,12 +154,11 @@ export default function Companies() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - COMPANYLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - companies.length) : 0;
 
-  const filteredUsers = applySortFilter(COMPANYLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(companies, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
 
   const [open, setOpen] = React.useState(false);
 
@@ -149,15 +170,13 @@ export default function Companies() {
     setOpen(false);
   };
 
-
   return (
     <Page title="Companies">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h5" gutterBottom>
             Companies
           </Typography>
-
           <div>
             <Button variant="contained" onClick={handleClickOpen} startIcon={<Iconify icon="eva:plus-fill" />} >
               Add Company
@@ -176,40 +195,32 @@ export default function Companies() {
                     </Tooltip>
                   </Grid>
                 </DialogTitle>
-                <AddCompany/>
-                {/* <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add Student</Button>
-        </DialogActions> */}
-
+                <AddCompany />
               </Dialog></FormControl>
           </div>
-
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
           </Button>
         </Stack>
 
         <Card>
-          {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
-
-          {/* <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}> */}
-              <CompanyList/>
-              {/* <Table>
+        <CompanyListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <Scrollbar>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={COMPANYLIST.length}
+                  rowCount={companies.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified, identifier, email } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const { id, company_name, company_email, username} = row;
+                    const isItemSelected = selected.indexOf(id) !== -1;
 
                     return (
                       <TableRow
@@ -221,22 +232,17 @@ export default function Companies() {
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
-
-                        <TableCell align="left">{identifier}</TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{email}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-
+                        <TableCell align="left">{id}</TableCell>
+                        <TableCell align="left">{company_name}</TableCell>
+                        <TableCell align="left">{company_email}</TableCell>
+                        <TableCell align="left">{username}</TableCell>
                         <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
-
-                        <TableCell align="right">
-                          <UserMoreMenu />
+                          <IconButton aria-label="edit" >
+                            <ModeEditOutlineOutlinedIcon color="info" />
+                          </IconButton>
+                          {/* <UserMoreMenu /> */}
                         </TableCell>
                       </TableRow>
                     );
@@ -257,21 +263,22 @@ export default function Companies() {
                     </TableRow>
                   </TableBody>
                 )}
-              </Table> */}
-            {/* </TableContainer>
-          </Scrollbar> */}
-
-          {/* <TablePagination
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+          <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={COMPANYLIST.length}
+            count={companies.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
+          />
         </Card>
       </Container>
     </Page>
   );
 }
+
+
