@@ -19,12 +19,14 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 import StudentService from "../components/student/student.service";
+import CompanyService from "../components/company/company.service";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
   const [students, setStudents] = useState([]);
+  const [companies, setCompanies] = useState([]);
 
   useEffect(()=>{
     // setInterval(() => {
@@ -37,6 +39,23 @@ export default function DashboardApp() {
     StudentService.getAll()
       .then(response => {
         setStudents(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  useEffect(()=>{
+    // setInterval(() => {
+     retrieveCompanies();
+    // }, 50000);
+  });
+
+  // Send request to api to retrieve student records from the database
+  const retrieveCompanies = () => {
+    CompanyService.getAll()
+      .then(response => {
+        setCompanies(response.data);
       })
       .catch(e => {
         console.log(e);
@@ -56,7 +75,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Companies on Platform" total={0} color="info" icon={'ant-design:bank-filled'} />
+            <AppWidgetSummary title="Companies on Platform" total={companies.length} color="info" icon={'ant-design:bank-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
