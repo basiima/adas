@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { useState, useEffect } from 'react';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
@@ -17,11 +18,30 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+import StudentService from "../components/student/student.service";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
+  const [students, setStudents] = useState([]);
+
+  useEffect(()=>{
+    // setInterval(() => {
+     retrieveStudents();
+    // }, 50000);
+  });
+
+  // Send request to api to retrieve student records from the database
+  const retrieveStudents = () => {
+    StudentService.getAll()
+      .then(response => {
+        setStudents(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
 
   return (
     <Page title="Dashboard">
@@ -32,7 +52,7 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Students on Platform" total={0} icon={'ant-design:team-outlined'} />
+            <AppWidgetSummary title="Students on Platform" total={students.length} icon={'ant-design:team-outlined'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
