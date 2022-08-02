@@ -11,6 +11,7 @@ import Companies from './pages/Companies';
 import Requests from './pages/Requests';
 import DashboardApp from './pages/DashboardApp';
 import StudentRequest from './pages/StudentRequest';
+import StudentIndex from './pages/StudentIndex';
 import CertifyDocument from './pages/CertifyDocument';
 
 
@@ -25,9 +26,10 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'companies', element: <Companies /> },
-        { path: 'documents', element: <Blog /> },
+        // { path: 'documents', element: <Blog /> },
         { path: 'requests', element: <Requests /> },
         { path: 'studentRequest', element: <StudentRequest /> },
+        { path: 'studentIndex', element: <StudentIndex /> },
         { path: 'certifyDocument', element: <CertifyDocument/> },
        
         
