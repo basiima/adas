@@ -27,8 +27,6 @@ import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-// mock
-import BLOGLIST from '../_mock/blog';
 
 // ----------------------------------------------------------------------
 
@@ -84,6 +82,8 @@ export default function Companies() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [documents, setDocuments] = useState([]);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -127,9 +127,9 @@ export default function Companies() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - BLOGLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - documents.length) : 0;
 
-  const filteredUsers = applySortFilter(BLOGLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(documents, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -156,7 +156,7 @@ export default function Companies() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={BLOGLIST.length}
+                  rowCount={documents.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -211,7 +211,7 @@ export default function Companies() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={BLOGLIST.length}
+            count={documents.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
