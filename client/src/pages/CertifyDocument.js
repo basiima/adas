@@ -1,128 +1,144 @@
 import React, { Component } from "react";
-import Container from  '@mui/material';
-import CertifyDocumentService from "../services/certifyDocument.service";
+import Container, { Typography } from '@mui/material';
+import axios from "axios";
+import { Progress } from 'reactstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Alert from "@mui/material/Alert";
 
 export default class CertifyDocument extends Component {
+
   constructor(props) {
     super(props);
-    this.selectFile = this.selectFile.bind(this);
-    this.upload = this.upload.bind(this);
-
     this.state = {
-      selectedFiles: undefined,
-      currentFile: undefined,
-      progress: 0,
-      message: "",
+      selectedFile: null
+    }
 
-      fileInfos: [],
+  }
+
+  /** Checking the number of files uploaded in a batch
+   *  Limit is set to 3 files per upload
+   */
+  // maxSelectFile = (event) => {
+  //   let files = event.target.files
+  //   if (files.length > 3) {
+  //     const msg = 'Only 3 images can be uploaded at a time'
+  //     event.target.value = null
+  //     console.log(msg)
+  //     return false;
+  //   }
+  //   return true;
+
+  // }
+
+  /** Checking the file type
+   *  Supported formats for ADAS are images[png, jpeg] & files[pdf]
+   */
+  checkMimeType = (event) => {
+    let files = event.target.files
+    let err = []
+    const types = ['image/png', 'image/jpeg', 'application/pdf', 'application/doc']
+
+    for (var x = 0; x < files.length; x++) {
+      if (types.every(type => files[x].type !== type)) {
+        err[x] = 'Unsupported file format\n\nUpload formats of: images(png, jpeg), pdf';
+      }
     };
+
+    // Displaying error message in react Toast component
+    for (var z = 0; z < err.length; z++) {
+      event.target.value = null
+      toast.error(err[z])
+    }
+    return true;
+
   }
 
-  componentDidMount() {
-    CertifyDocumentService.getFiles().then((response) => {
+  /** Checking the maximum file upoad size
+   *  The maximum upload size is set to 2MB
+   */
+  checkFileSize = (event) => {
+    let files = event.target.files
+    let size = 2000000
+    let err = [];
+
+    for (var x = 0; x < files.length; x++) {
+      if (files[x].size > size) {
+        err[x] = 'File is too large, Max size is 2MB\n';
+      }
+    };
+
+    // Displaying error message in react Toast component
+    for (var z = 0; z < err.length; z++) {
+      toast.error(err[z])
+      event.target.value = null
+    }
+
+    return true;
+
+  }
+
+  onChangeHandler = event => {
+    var files = event.target.files
+
+    if (this.checkMimeType(event) && this.checkFileSize(event)) {
       this.setState({
-        fileInfos: response.data,
-      });
-    });
+        selectedFile: event.target.files[0]
+      })
+    }
+    console.log(event.target.files[0])
   }
 
-  selectFile(event) {
-    this.setState({
-      selectedFiles: event.target.files,
-    });
-  }
+  onClickHandler = () => {
+    const data = new FormData()
+      data.append('file', this.state.selectedFile)
 
-  upload() {
-    const currentFile = this.state.selectedFiles[0];
-    console.log(this.state.selectedFiles)
-    this.setState({
-      progress: 0,
-      currentFile: currentFile,
-    });
+    axios.post("http://localhost:8080/upload", data, {
 
-    CertifyDocumentService.upload(currentFile, (event) => {
-      this.setState({
-        progress: Math.round((100 * event.loaded) / event.total),
-      });
+      onUploadProgress: ProgressEvent => {
+        this.setState({
+          loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
+        })
+      },
+
     })
-      .then((response) => {
-        this.setState({
-          message: response.data.message,
-        });
-        return CertifyDocumentService.getFiles();
+      .then(res => {
+        toast.success('upload success')
+        console.log(res.statusText)
       })
-      .then((files) => {
-        this.setState({
-          fileInfos: files.data,
-        });
+      .catch(err => {
+        if(this.state.selectedFile == null){
+          toast.error('Select a file to upload !')
+        }
+        toast.error('Upload fail')
       })
-      .catch(() => {
-        this.setState({
-          progress: 0,
-          message: "Could not upload the file!",
-          currentFile: undefined,
-        });
-      });
-
-    this.setState({
-      selectedFiles: undefined,
-    });
   }
 
   render() {
-    const {
-      selectedFiles,
-      currentFile,
-      progress,
-      message,
-      fileInfos,
-    } = this.state;
-
     return (
-      <div>
-        {currentFile && (
-          <div className="progress">
-            <div
-              className="progress-bar progress-bar-info progress-bar-striped"
-              role="progressbar"
-              aria-valuenow={progress}
-              aria-valuemin="0"
-              aria-valuemax="100"
-              style={{ width: `${progress} %` }}
-            >
-              {progress}%
+      <form action="/upload" method="post" encType="multipart/form-data">
+      <div className="container">
+        <div className="row">
+          <div className="offset-md-3 col-md-6">
+            <Alert severity="info"><Typography><b>Supported file formats</b>: png, jpeg, pdf. <b> Max File size</b>: 2MB</Typography></Alert>
+            <br/>
+            <div className="form-group files">
+              <label>Upload File </label>
+              <input type="file" name="file" className="form-control" multiple onChange={this.onChangeHandler} required={true}/>
+            </div>
+            <div className="form-group">
+              <br />
+              <ToastContainer />
+              <Progress max="100" color="success" value={this.state.loaded}>{Math.round(this.state.loaded, 2)}%</Progress>
+            </div>
+            <br />
+            <div>
+              <button type="button" className="btn btn-primary btn-block" onClick={this.onClickHandler}>Upload</button>
             </div>
           </div>
-        )}
-
-        <label className="btn btn-default">
-          <input type="file" onChange={this.selectFile} />
-        </label>
-
-        <button
-          className="btn btn-primary"
-          disabled={!selectedFiles}
-          onClick={this.upload}
-        >
-          Upload
-        </button>
-
-        <div className="alert alert-light" role="alert">
-          {message}
-        </div>
-
-        <div className="card">
-          <div className="card-header">List of Files</div>
-          <ul className="list-group list-group-flush">
-            {fileInfos &&
-              fileInfos.map((file, index) => (
-                <li className="list-group-item" key={index}>
-                  <a href={file.url}>{file.name}</a>
-                </li>
-              ))}
-          </ul>
         </div>
       </div>
+      </form>
     );
   }
 }

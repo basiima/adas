@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -18,24 +18,26 @@ import {
   Typography,
   TableContainer,
   TablePagination,
- 
+  TextField,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, Grid, IconButton, Tooltip
 } from '@mui/material';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+
 // components
 import Page from '../components/Page';
-import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import { UserListHead, StudentListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import DocumentListToolbar from '../sections/@dashboard/products/DocumentListToolbar'
+import DocumentService from "../components/document/document.service";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'ID', alignRight: false },
-  { id: 'documentType', label: 'Document Type', alignRight: false },
-  { id: 'key', label: 'Key', alignRight: false },
-  { id: 'referenceID', label: 'Reference ID', alignRight: false },
-  { id: 'date', label: 'Date Certified', alignRight: false },
+  { id: 'document_file', label: 'Document Name', alignRight: false },
+  { id: 'document_hash', label: 'Hash Value', alignRight: false },
+  { id: 'createdAt', label: 'Date Certified', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -64,25 +66,43 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.document_file.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Companies() {
+export default function Student() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('documentType');
+  const [orderBy, setOrderBy] = useState('document_file');
 
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [documents, setDocuments] = useState([]);
+
+  // Trigger retrieve documents function on load up
+  useEffect(()=>{
+    // setInterval(() => {
+     retrieveDocuments();
+    // }, 50000);
+  });
+
+  // Send request to api to retrieve student records from the database
+  const retrieveDocuments = () => {
+    DocumentService.getAll()
+      .then(response => {
+        setDocuments(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -92,18 +112,18 @@ export default function Companies() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = BLOGLIST.map((n) => n.name);
+      const newSelecteds = documents.map((n) => n.document_file);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, document_file) => {
+    const selectedIndex = selected.indexOf(document_file);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, document_file);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -137,18 +157,16 @@ export default function Companies() {
     <Page title="Documents">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            View Documents
+          <Typography variant="h5" gutterBottom>
+            Documents
           </Typography>
-          
-          <Button variant="contained" component={RouterLink} to="/dashboard/requests" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/requests">
             View Requests
           </Button>
         </Stack>
 
         <Card>
-          {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
-
+        <DocumentListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -163,8 +181,8 @@ export default function Companies() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, documentType, key, dateCertified, referenceID, avatarUrl, isVerified, identifier} = row;
-                    const isItemSelected = selected.indexOf(documentType) !== -1;
+                    const { id, document_file, document_hash, createdAt} = row;
+                    const isItemSelected = selected.indexOf(id) !== -1;
 
                     return (
                       <TableRow
@@ -176,15 +194,12 @@ export default function Companies() {
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, documentType)} />
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
-                        <TableCell align="left">{key}</TableCell>
-                        <TableCell align="left">{referenceID}</TableCell>
-                        <TableCell align="left">{dateCertified}</TableCell>
-                        <TableCell align="left">{identifier}</TableCell>
-                        <TableCell align="right">
-                          <UserMoreMenu />
-                        </TableCell>
+                        <TableCell align="left">{id}</TableCell>
+                        <TableCell align="left">{document_file}</TableCell>
+                        <TableCell align="left">{document_hash}</TableCell>
+                        <TableCell align="left">{createdAt}</TableCell>
                       </TableRow>
                     );
                   })}
@@ -207,7 +222,6 @@ export default function Companies() {
               </Table>
             </TableContainer>
           </Scrollbar>
-
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
@@ -222,3 +236,5 @@ export default function Companies() {
     </Page>
   );
 }
+
+
