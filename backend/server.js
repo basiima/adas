@@ -4,7 +4,7 @@ const cors = require("cors");
 const path = __dirname + '/app/views/';
 const app = express();
 const multer = require("multer");
-const MD5 = require("crypto-js/md5");
+const SHA = require("crypto-js/sha256");
 
 app.use(express.static(path));
 
@@ -72,7 +72,7 @@ app.post('/upload',async(req, res) => {
          *  @hashValue uses cryptojs library referenced by @MD5
          *  to generate a document's hashvalue using the filename
          */
-        const hashValue =  MD5(fileName).toString();
+        const hashValue =  SHA(fileName).toString();
          const document = {
           document_file: fileName,
           document_hash: hashValue
