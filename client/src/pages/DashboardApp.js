@@ -71,19 +71,19 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Students on Platform" total={students.length} icon={'ant-design:team-outlined'} />
+            <AppWidgetSummary title="Students on Platform" total={students.length} icon={'eva:people-fill'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Companies on Platform" total={companies.length} color="info" icon={'ant-design:bank-filled'} />
+            <AppWidgetSummary title="Companies on Platform" total={companies.length} color="info" icon={'clarity:building-solid'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Documents Verified" total={0} color="warning" icon={'ant-design:like-filled'} />
+            <AppWidgetSummary title="Documents Verified" total={0} color="warning" icon={'eva:file-text-fill'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Pending Verifications" total={0} color="error" icon={'ant-design:hourglass-filled'} />
+            <AppWidgetSummary title="Pending Verifications" total={0} color="error" icon={'icon-park-outline:incoming'} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

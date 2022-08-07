@@ -19,7 +19,7 @@ const navConfig = [
   {
     title: 'Companies',
     path: '/dashboard/companies',
-    icon: getIcon('eva:shopping-bag-fill'),
+    icon: getIcon('clarity:building-solid'),
   },
   {
     title: 'Documents',
@@ -27,9 +27,14 @@ const navConfig = [
     icon: getIcon('eva:file-text-fill'),
   },
   {
+    title: 'Requests',
+    path: '/dashboard/requests',
+    icon: getIcon('icon-park-outline:incoming'),
+  },
+  {
     title: 'Logout',
     path: '/login',
-    icon: getIcon('carbon:logout'),
+    icon: getIcon('ri:logout-circle-r-fill'),
   },
 ];
 

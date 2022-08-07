@@ -16,7 +16,7 @@ import Page from '../components/Page';
 
 export default function Requests() {
   return (
-    <Page title="Requets">
+    <Page title="Requests">
     <Container  maxWidth="xl">
     <List sx={{ width: '100%', maxWidth: 800, bgcolor: 'background.paper' }}>
       <ListItem alignItems="flex-start">
@@ -24,7 +24,7 @@ export default function Requests() {
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary="Brunch this weekend?"
+          primary="Remy Sharp"
           secondary={
             <fragment>
               <Typography
@@ -33,14 +33,14 @@ export default function Requests() {
                 variant="body2"
                 color="text.primary"
               >
-                Priscilla
+                Document Type:
               </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
+              {" Masters"}
             </fragment>
           }
         />
         <div>
-        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument">
             Certify
           </Button>
         </div>
@@ -51,7 +51,7 @@ export default function Requests() {
           <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary="Summer BBQ"
+          primary="Travis Howard"
           secondary={
             <fragment>
               <Typography
@@ -60,14 +60,14 @@ export default function Requests() {
                 variant="body2"
                 color="text.primary"
               >
-                Andrew
+                Document Type:
               </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
+              {" Bachelors"}
             </fragment>
           }
         />
         <div>
-        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument">
             Certify
           </Button>
         </div>
@@ -78,7 +78,7 @@ export default function Requests() {
           <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary="Oui Oui"
+          primary="Cindy Baker"
           secondary={
             <fragment>
               <Typography
@@ -87,14 +87,14 @@ export default function Requests() {
                 variant="body2"
                 color="text.primary"
               >
-                Sandra Adams
+                Document Type:
               </Typography>
-              {' — Do you have Paris recommendations? Have you ever…'}
+              {' Certificate'}
             </fragment>
           }
         />
         <div>
-        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument">
             Certify
           </Button>
         </div>
