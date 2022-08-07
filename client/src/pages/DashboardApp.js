@@ -20,6 +20,7 @@ import {
 } from '../sections/@dashboard/app';
 import StudentService from "../components/student/student.service";
 import CompanyService from "../components/company/company.service";
+import DocumentService from "../components/document/document.service"
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export default function DashboardApp() {
   const theme = useTheme();
   const [students, setStudents] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [documents, setDocuments] = useState([]);
 
   useEffect(()=>{
     // setInterval(() => {
@@ -62,6 +64,23 @@ export default function DashboardApp() {
       });
   }
 
+  useEffect(()=>{
+    // setInterval(() => {
+     retriveDocuments();
+    // }, 50000);
+  });
+
+  // Send request to api to retrieve student records from the database
+  const retriveDocuments = () => {
+    DocumentService.getAll()
+      .then(response => {
+        setDocuments(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
@@ -79,7 +98,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Documents Verified" total={0} color="warning" icon={'eva:file-text-fill'} />
+            <AppWidgetSummary title="Documents Verified" total={documents.length} color="warning" icon={'eva:file-text-fill'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
