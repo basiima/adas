@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const path = __dirname + '/app/views/';
 const app = express();
+const multer = require("multer");
+const MD5 = require("crypto-js/md5");
 
 app.use(express.static(path));
 
@@ -23,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 // database
 const db = require("./app/models");
 const Role = db.role;
+const Document = db.document;
 
 db.sequelize.sync();
 // force: true will drop the table if it already exists
@@ -41,10 +44,52 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/student.routes')(app);
 require('./app/routes/company.routes')(app);
+require('./app/routes/document.routes')(app)
+
+/**
+ *  Document upload and hashing logic lies here in 
+ *  functions @storage and @upload
+ *  The uploaded file's reference is stored in the database
+ *  while the static files are stored in the public/documents
+ *  folder on the client side
+ *  
+ */
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './../client/public/documents')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage }).single('file')
+
+app.post('/upload',async(req, res) => {
+  upload(req, res, function (err) {
+        const fileName = req.file.filename
+        /**
+         *  @hashValue uses cryptojs library referenced by @MD5
+         *  to generate a document's hashvalue using the filename
+         */
+        const hashValue =  MD5(fileName).toString();
+         const document = {
+          document_file: fileName,
+          document_hash: hashValue
+         };
+         Document.create(document)
+         .then(data => {
+           res.send(data);
+         })
+    
+  })
+
+});
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => {
+app.listen(PORT, function() {
   console.log(`Server is running on port ${PORT}.`);
 });
 
@@ -64,3 +109,5 @@ function initial() {
     name: "company"
   });
 }
+
+
