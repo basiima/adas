@@ -1,5 +1,6 @@
 const db = require("../models");
 const Student = db.student;
+const User = db.user;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer"); // Require the Nodemailer package
