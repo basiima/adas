@@ -15,12 +15,13 @@ exports.create = (req, res) => {
     }
     // Create a Company
     const defaultPassword = "adas-".concat(req.body.username);
+    const encryptedDefaultPassword = bcrypt.hashSync(defaultPassword, 8);
     const company = {
         id: req.body.id,
         company_name: req.body.company_name,
         company_email: req.body.company_email,
         username: req.body.username,
-        password: bcrypt.hashSync(defaultPassword, 8)
+        password: encryptedDefaultPassword
     };
     // Save Company in the database
     Company.create(company)
@@ -33,6 +34,33 @@ exports.create = (req, res) => {
             err.message || "Some error occurred while creating the Company."
         });
       });
+
+    // Save company in the users table  
+    User.create({
+      username: req.body.username,
+      email: req.body.company_email,
+      password: encryptedDefaultPassword
+    })
+    .then(user => {
+      if (req.body.roles) {
+        Role.findAll({
+          where: {
+            name: {
+              [Op.or]: req.body.roles
+            }
+          }
+        })
+        .then(roles => {
+          user.setRoles(roles);
+        });
+      } else {
+        // company role = 3
+        user.setRoles([3]);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
 
     // Send Email containing default password
     async function sendMail(){

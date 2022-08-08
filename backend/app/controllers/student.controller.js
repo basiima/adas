@@ -15,6 +15,7 @@ exports.create = (req, res) => {
     }
     // Create a Student
     const defaultPassword = "adas-".concat(req.body.student_number);
+    const encryptedDefaultPassword = bcrypt.hashSync(defaultPassword, 8);
     const student = {
         id: req.body.id,
         student_name: req.body.student_name,
@@ -22,9 +23,9 @@ exports.create = (req, res) => {
         username: req.body.username,
         email: req.body.email,
         phone: req.body.phone,
-        password: bcrypt.hashSync(defaultPassword, 8)
+        password: encryptedDefaultPassword
     };
-    // Save Student in the database
+    // Save Student in the students table
     Student.create(student)
       .then(data => {
         res.send(data);
@@ -35,6 +36,33 @@ exports.create = (req, res) => {
             err.message || "Some error occurred while creating the Student."
         });
       });
+
+    // Save student in the users table  
+    User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: encryptedDefaultPassword
+    })
+    .then(user => {
+      if (req.body.roles) {
+        Role.findAll({
+          where: {
+            name: {
+              [Op.or]: req.body.roles
+            }
+          }
+        })
+        .then(roles => {
+          user.setRoles(roles);
+        });
+      } else {
+        // student role = 1
+        user.setRoles([1]);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
 
     // Send Email containing default password
     async function sendMail(){
