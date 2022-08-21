@@ -46,7 +46,8 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/student.routes')(app);
 require('./app/routes/company.routes')(app);
-require('./app/routes/document.routes')(app)
+require('./app/routes/document.routes')(app);
+require('./app/routes/studentRequest.routes')(app)
 
 /**
  *  Document upload and hashing logic lies here in 
@@ -111,5 +112,4 @@ function initial() {
     name: "company"
   });
 }
-
 
