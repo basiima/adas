@@ -38,4 +38,51 @@ const navConfig = [
   },
 ];
 
-export default navConfig;
+const companyNavConfig = [
+  {
+    title: 'dashboard',
+    path: '/dashboard/app',
+    icon: getIcon('eva:pie-chart-2-fill'),
+  },
+  {
+    title: 'Records',
+    path: '#',
+    icon: getIcon('eva:file-text-fill'),
+  },
+  {
+    title: 'Logout',
+    path: '/login',
+    icon: getIcon('ri:logout-circle-r-fill'),
+  },
+]
+
+const studentNavConfig = [
+  {
+    title: 'dashboard',
+    path: '/dashboard/app',
+    icon: getIcon('eva:pie-chart-2-fill'),
+  },
+  {
+    title: 'My Documents',
+    path: '/dashboard/documents',
+    icon: getIcon('eva:file-text-fill'),
+  },
+  {
+    title: 'My Requests',
+    path: '#',
+    icon: getIcon('icon-park-outline:incoming'),
+  },
+  {
+    title: 'Logout',
+    path: '/login',
+    icon: getIcon('ri:logout-circle-r-fill'),
+  },
+]
+
+const NavService = {
+  navConfig,
+  companyNavConfig,
+  studentNavConfig
+}
+
+export default NavService;
