@@ -1,33 +1,35 @@
 import http from "../../http-common";
 
-class StudentService {
-    static getAll() {
+    const getAll = () => {
       return http.get("/students");
     }
     
-    static get(id) {
-      return http.get(`/students/${id}`);
+    const get = (username) => {
+      return http.get(`/students/${username}`);
     }
 
-    static create(data) {
+    const create = (data) => {
       return http.post("/students", data);
     }
 
-    static update(id, data) {
+    const update = (id, data) => {
       return http.put(`/students/${id}`, data);
     }
 
-    static delete(id) {
+    const remove = id => {
       return http.delete(`/students/${id}`);
     }
 
-    static deleteAll() {
+    const deleteAll = () => {
       return http.delete(`/students`);
     }
-
-    static findByName(student_name) {
-      return http.get(`/students?student_name=${student_name}`);
-    }
     
-  }
+const StudentService = {
+  getAll,
+  get,
+  create,
+  update,
+  remove,
+  deleteAll
+}
 export default StudentService;

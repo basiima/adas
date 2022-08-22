@@ -11,6 +11,7 @@ import Companies from './pages/Companies';
 import Requests from './pages/Requests';
 import DashboardApp from './pages/DashboardApp';
 import CertifyDocument from './pages/CertifyDocument';
+import AddRequest from './components/requests/AddRequest';
 
 
 // ----------------------------------------------------------------------
@@ -27,7 +28,7 @@ export default function Router() {
         { path: 'documents', element: <Blog /> },
         { path: 'requests', element: <Requests /> },
         { path: 'certifyDocument', element: <CertifyDocument/> },
-       
+        { path: 'place-request', element: <AddRequest/> }
         
       ],
     },
