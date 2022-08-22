@@ -15,7 +15,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       status: {
         type: Sequelize.INTEGER
-      }
+      },
+    },{
+      paranoid: true
     });
   
     return StudentRequest;

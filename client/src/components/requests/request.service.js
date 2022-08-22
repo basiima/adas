@@ -13,14 +13,6 @@ class RequestService {
       return http.post("/student_requests", data);
     }
 
-    static delete(request_id) {
-      return http.delete(`/student_requests/${request_id}`);
-    }
-
-    static deleteAll() {
-      return http.delete(`/student_requests`);
-    }
-
     static findByName(student_name) {
       return http.get(`/student_requests?student_requests=${student_name}`);
     }

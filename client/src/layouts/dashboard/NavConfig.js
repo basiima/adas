@@ -69,7 +69,7 @@ const studentNavConfig = [
   },
   {
     title: 'My Requests',
-    path: '#',
+    path: '/dashboard/requests',
     icon: getIcon('icon-park-outline:incoming'),
   },
   {
