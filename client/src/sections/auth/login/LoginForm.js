@@ -56,7 +56,7 @@ export default function LoginForm() {
       AuthService.login(username, password).then(
         () => {
           navigate('/dashboard/app', { replace: true });
-        //  window.location.reload();
+          window.location.reload();
         },
         (error) => {
           const resMessage =
