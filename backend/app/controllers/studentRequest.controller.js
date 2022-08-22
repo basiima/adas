@@ -38,6 +38,7 @@ exports.create = (req, res) => {
     const student_request = {
         request_id: requestId,
         student_name: req.body.student_name,
+        student_number: req.body.student_number,
         document_type: req.body.document_type,
         status: defaultStatus,
     };

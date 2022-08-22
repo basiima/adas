@@ -10,6 +10,9 @@ module.exports = (sequelize, Sequelize) => {
       document_type: {
         type: Sequelize.STRING
       },
+      student_number: {
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.INTEGER
       }

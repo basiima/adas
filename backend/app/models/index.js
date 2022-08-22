@@ -42,14 +42,6 @@ db.user.belongsToMany(db.role, {
   otherKey: "roleId"
 });
 
-db.student.hasMany(db.student_request, {
-  foreignKey: "student_number"
-});
-db.student_request.belongsTo(db.student, {
-  foreignKey: "student_number",
-  as:"studentReference"
-})
-
 db.ROLES = ["student", "issuer", "company"];
 
 module.exports = db;

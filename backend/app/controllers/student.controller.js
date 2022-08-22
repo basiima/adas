@@ -112,14 +112,16 @@ exports.findAll = (req, res) => {
 
 // Return a student of a specified id   
 exports.findOne = (req, res) => {
-    const id = req.params.id;
-    Student.findByPk(id)
+    const username = req.params.id;
+    Student.findOne({
+      where: { username: { [Op.like]: `%${username}%` } }
+    })
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Student with id=${id}.`
+            message: `Cannot find Student with username=${username}.`
           });
         }
       })
