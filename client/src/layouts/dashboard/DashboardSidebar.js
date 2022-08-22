@@ -13,9 +13,13 @@ import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
-import navConfig from './NavConfig';
+//import navConfig from './NavConfig';
+import NavService from './NavConfig';
+import AuthService from '../../services/auth.service';
 
 // ----------------------------------------------------------------------
+const loggedInUser = AuthService.getCurrentUser();
+const loggedInUserRole = loggedInUser.roles;
 
 const DRAWER_WIDTH = 280;
 
@@ -80,8 +84,18 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </Link>
       </Box>
 
-      <NavSection navConfig={navConfig} />
-
+      {loggedInUserRole == 'ROLE_ISSUER' && (
+      <NavSection navConfig={NavService.navConfig} />
+      )
+      }
+      {loggedInUserRole == 'ROLE_COMPANY' && (
+      <NavSection navConfig={NavService.companyNavConfig} />
+      )
+      }
+      {loggedInUserRole == 'ROLE_STUDENT' && (
+      <NavSection navConfig={NavService.studentNavConfig} />
+      )
+      }
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );

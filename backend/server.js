@@ -5,6 +5,8 @@ const path = __dirname + '/app/views/';
 const app = express();
 const multer = require("multer");
 const SHA = require("crypto-js/sha256");
+const bcrypt = require("bcryptjs");
+
 
 app.use(express.static(path));
 
@@ -26,9 +28,12 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./app/models");
 const Role = db.role;
 const Document = db.document;
+const User = db.user;
+const Op = db.Sequelize.Op;
 
 db.sequelize.sync().then(() => {
   initial();
+  initialUser();
 });
 // force: true will drop the table if it already exists
 // db.sequelize.sync({force: true}).then(() => {
@@ -113,3 +118,15 @@ function initial() {
   });
 }
 
+const defaultAdminPassword = "adas-admin";
+const encryptedDefaultAdminPassword = bcrypt.hashSync(defaultAdminPassword, 8);
+function initialUser() {
+  User.create({
+    username: "admin",
+    email: "admin@adas.com",
+    password: encryptedDefaultAdminPassword
+  })
+  .then(user => {
+    user.setRoles([2]);
+  });
+}
