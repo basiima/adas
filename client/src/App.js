@@ -1,6 +1,7 @@
 // routes
 import React from "react";
 import Router from './routes';
+import Navbar from './pages/navbar';
 // theme
 import ThemeProvider from './theme';
 // components
@@ -15,7 +16,9 @@ import CertifyDocument from "./pages/CertifyDocument";
 
 export default function App() {
   return (
+    
     <ThemeProvider>
+      <Navbar/>
       <ScrollToTop />
       <BaseOptionChartStyle />
       <Router />

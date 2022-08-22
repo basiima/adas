@@ -7,6 +7,7 @@ import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
 import Logo from '../components/Logo';
+
 // sections
 import { LoginForm } from '../sections/auth/login';
 // import AuthSocial from '../sections/auth/AuthSocial';
@@ -64,17 +65,9 @@ export default function Login() {
   return (
     <Page title="Login">
       <RootStyle>
-        <HeaderStyle>
-          <Logo />
 
-          {smUp && (
-            <Typography variant="body2" sx={{ mt: { md: -2 } }}>
-              Don’t have an account? {''}
-              <Link variant="subtitle2" component={RouterLink} to="/register">
-                Get started
-              </Link>
-            </Typography>
-          )}
+        <HeaderStyle>
+         <Logo/>
         </HeaderStyle>
 
         {mdUp && (
