@@ -160,9 +160,6 @@ export default function Student() {
           <Typography variant="h5" gutterBottom>
             Documents
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/requests">
-            View Requests
-          </Button>
         </Stack>
 
         <Card>

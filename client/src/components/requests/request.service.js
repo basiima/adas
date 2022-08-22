@@ -5,8 +5,8 @@ class RequestService {
       return http.get("/student_requests");
     }
     
-    static get(request_id) {
-      return http.get(`/student_requests/${request_id}`);
+    static get(student_number) {
+      return http.get(`/student_requests/${student_number}`);
     }
 
     static create(data) {

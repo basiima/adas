@@ -34,8 +34,15 @@ import SearchNotFound from '../components/SearchNotFound';
 
 import AuthService from '../services/auth.service';
 import RequestService from '../components/requests/request.service';
+import StudentService from '../components/student/student.service';
 
-const TABLE_HEAD = [
+const loggedInUser = AuthService.getCurrentUser();
+const loggedInUserRole = loggedInUser.roles;
+const loggedInUserName = loggedInUser.username;
+
+var TABLE_HEAD =[];
+if(loggedInUserRole=='ROLE_ISSUER'){
+TABLE_HEAD = [
   { id: 'request_id', label: 'Request ID', alignRight: false },
   { id: 'student_name', label: 'Student Name', alignRight: false },
   { id: 'student_number', label: 'Student Number', alignRight: false },
@@ -44,6 +51,16 @@ const TABLE_HEAD = [
   { id: 'createdAt', label: 'Request Date', alignRight: false },
   { id: 'action', label: 'Action', alignRight: false }
 ];
+}else if(loggedInUserRole=='ROLE_STUDENT'){
+  TABLE_HEAD = [
+    { id: 'request_id', label: 'Request ID', alignRight: false },
+    { id: 'student_name', label: 'Student Name', alignRight: false },
+    { id: 'student_number', label: 'Student Number', alignRight: false },
+    { id: 'document_type', label: 'Document Type', alignRight: false },
+    { id: 'status', label: 'Status', alignRight: false },
+    { id: 'createdAt', label: 'Request Date', alignRight: false },
+  ];
+}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,8 +92,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Requests() {
-  const loggedInUser = AuthService.getCurrentUser();
-  const loggedInUserRole = loggedInUser.roles;
 
   const [page, setPage] = useState(0);
 
@@ -99,8 +114,9 @@ export default function Requests() {
       // }, 50000);
     });
   
-    // Send request to api to retrieve student records from the database
+    // Send request to api to retrieve requests records from the database
     const retrieveRequests = () => {
+      if(loggedInUserRole=='ROLE_ISSUER'){
       RequestService.getAll()
         .then(response => {
           setStudents(response.data);
@@ -108,6 +124,20 @@ export default function Requests() {
         .catch(e => {
           console.log(e);
         });
+      }else if(loggedInUserRole=='ROLE_STUDENT'){
+        StudentService.get(loggedInUserName)
+            .then(response => {
+              RequestService.get(response.data.student_number)
+              .then(response =>{
+                setStudents(response.data);
+                console.log(response.data);
+              })
+                console.log(response.data.student_number);
+            })
+            .catch(e =>{
+              console.log(e);
+            })
+      }
     }
   
     const handleRequestSort = (event, property) => {
@@ -271,7 +301,7 @@ export default function Requests() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { request_id, student_name, student_number, document_type, status, createdAt, action} = row;
+                    const { request_id, student_name, student_number, document_type, status, createdAt} = row;
                     const isItemSelected = selected.indexOf(request_id) !== -1;
 
                     return (
@@ -296,11 +326,13 @@ export default function Requests() {
                           </Typography>
                         </TableCell>
                         <TableCell align="left">{createdAt}</TableCell>
+                        {loggedInUserRole=='ROLE_ISSUER' &&
                         <TableCell align="left">
                           <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument">
                               Certify
                           </Button>
                         </TableCell>
+                        }
                       </TableRow>
                     );
                   })}

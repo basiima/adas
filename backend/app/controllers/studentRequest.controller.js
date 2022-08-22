@@ -74,20 +74,22 @@ exports.findAll = (req, res) => {
 
 // Return a request of a specified request id   
 exports.findOne = (req, res) => {
-    const request_id = req.params.request_id;
-    StudentRequest.findByPk(id)
+    const student_number = req.params.id;
+    StudentRequest.findAll({
+      where: {student_number : { [Op.like]: `%${student_number}%` } }
+    })
       .then(data => {
         if (data) {
           res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find Request with id=${request_id}.`
+            message: `Cannot find Request with student_number=${student_number}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving Request with id=" + request_id
+          message: "Error retrieving Request with student_number=" + student_number
         });
       });
   };
