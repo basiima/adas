@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { filter } from 'lodash';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -31,6 +31,7 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import AuthService from '../services/auth.service';
 import RequestService from '../components/requests/request.service';
@@ -326,11 +327,22 @@ export default function Requests() {
                           </Typography>
                         </TableCell>
                         <TableCell align="left">{createdAt}</TableCell>
-                        {loggedInUserRole=='ROLE_ISSUER' &&
+                        {loggedInUserRole=='ROLE_ISSUER' && status==0 &&
                         <TableCell align="left">
-                          <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument">
+                          <Link to="/dashboard/certifyDocument" 
+                          state={ { id:request_id, student_name: student_name, student_number: student_number, document_type: document_type } }
+                          style={{ fontWeight: 'bold' }}
+                          >
+                            Certify
+                          </Link>
+                          {/* <Button variant="contained" component={RouterLink} to="/dashboard/certifyDocument">
                               Certify
-                          </Button>
+                          </Button> */}
+                        </TableCell>
+                        }
+                        {loggedInUserRole=='ROLE_ISSUER' && status==1 &&
+                        <TableCell align="left">
+                            <CheckCircleIcon style={ {color: 'green'} }></CheckCircleIcon>
                         </TableCell>
                         }
                       </TableRow>
