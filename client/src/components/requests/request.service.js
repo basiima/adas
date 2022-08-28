@@ -16,6 +16,10 @@ class RequestService {
     static findByName(student_name) {
       return http.get(`/student_requests?student_requests=${student_name}`);
     }
+
+    static update = (request_id, data) => {
+      return http.put(`/student_requests/${request_id}`, data);
+    }
     
   }
 export default RequestService;

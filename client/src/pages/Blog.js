@@ -31,15 +31,30 @@ import { UserListHead, StudentListToolbar, UserMoreMenu } from '../sections/@das
 import DocumentListToolbar from '../sections/@dashboard/products/DocumentListToolbar'
 import DocumentService from "../components/document/document.service";
 
-// ----------------------------------------------------------------------
+import AuthService from '../services/auth.service';
 
-const TABLE_HEAD = [
+const loggedInUser = AuthService.getCurrentUser();
+const loggedInUserRole = loggedInUser.roles;
+const loggedInUserName = loggedInUser.username;
+
+var TABLE_HEAD =[];
+
+if(loggedInUserRole=='ROLE_ISSUER'){
+TABLE_HEAD = [
   { id: 'id', label: 'ID', alignRight: false },
   { id: 'document_file', label: 'Document Name', alignRight: false },
+  { id: 'referenceId', label: 'Reference Number', alignRight: false },
   { id: 'document_hash', label: 'Hash Value', alignRight: false },
   { id: 'createdAt', label: 'Date Certified', alignRight: false }
 ];
-
+} else if(loggedInUserRole=='ROLE_STUDENT'){
+  TABLE_HEAD = [
+    { id: 'id', label: 'ID', alignRight: false },
+    { id: 'document_file', label: 'Document Name', alignRight: false },
+    { id: 'document_hash', label: 'Hash Value', alignRight: false },
+    { id: 'createdAt', label: 'Date Certified', alignRight: false }
+  ];
+}
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -178,7 +193,7 @@ export default function Student() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, document_file, document_hash, createdAt} = row;
+                    const { id, document_file, referenceId, document_hash, createdAt} = row;
                     const isItemSelected = selected.indexOf(id) !== -1;
 
                     return (
@@ -195,6 +210,9 @@ export default function Student() {
                         </TableCell>
                         <TableCell align="left">{id}</TableCell>
                         <TableCell align="left">{document_file}</TableCell>
+                        {loggedInUserRole=='ROLE_ISSUER' &&
+                        <TableCell align="left">{referenceId}</TableCell>
+                        }
                         <TableCell align="left">{document_hash}</TableCell>
                         <TableCell align="left">{createdAt}</TableCell>
                       </TableRow>
