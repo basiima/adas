@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 // database
 const db = require("./app/models");
 const Role = db.role;
-const Document = db.document;
+const SignedDocument = db.signed_document;
 const User = db.user;
 const Op = db.Sequelize.Op;
 
@@ -51,7 +51,7 @@ require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/student.routes')(app);
 require('./app/routes/company.routes')(app);
-require('./app/routes/document.routes')(app);
+require('./app/routes/signedDocument.routes')(app);
 require('./app/routes/studentRequest.routes')(app)
 
 /**
@@ -76,16 +76,18 @@ const upload = multer({ storage: storage }).single('file')
 app.post('/upload',async(req, res) => {
   upload(req, res, function (err) {
         const fileName = req.file.filename
+        const referenceId = req.body.referenceId
         /**
          *  @hashValue uses cryptojs library referenced by @MD5
          *  to generate a document's hashvalue using the filename
          */
         const hashValue =  SHA(fileName).toString();
-         const document = {
+         const signed_document = {
           document_file: fileName,
-          document_hash: hashValue
+          document_hash: hashValue,
+          referenceId: referenceId
          };
-         Document.create(document)
+         SignedDocument.create(signed_document)
          .then(data => {
            res.send(data);
          })
