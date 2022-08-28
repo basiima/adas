@@ -11,5 +11,8 @@ module.exports = app => {
     // Retrieve a single Request with request_id
     router.get("/:id", student_requests.findOne);
 
+    // Update a request with id
+    router.put("/:id", student_requests.update);
+
     app.use('/api/student_requests', router);
   };

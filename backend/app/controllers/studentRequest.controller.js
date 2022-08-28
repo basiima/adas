@@ -93,3 +93,27 @@ exports.findOne = (req, res) => {
         });
       });
   };
+
+// Update a student of a specified is
+exports.update = (req, res) => {
+  const request_id = req.params.id;
+  StudentRequest.update(req.body, {
+    where: {request_id : request_id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Request status was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Request with request_id=${request_id}. Maybe Request was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Request with request_id=" + request_id
+      });
+    });
+};
