@@ -20,7 +20,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 // utils
-import { fToNow } from '../../utils/formatTime';
+import { fToNow, fDateTime } from '../../utils/formatTime';
 // components
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
@@ -209,7 +209,7 @@ function renderContent(notification) {
     <Typography variant="subtitle2">
       Request from {notification.student_name}
       <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; Certification for {noCase(notification.document_type)} placed at {notification.createdAt}
+        &nbsp; Certification for {noCase(notification.document_type)} placed at {fDateTime(notification.createdAt)}
       </Typography>
     </Typography>
   );

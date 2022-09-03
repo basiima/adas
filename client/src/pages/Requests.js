@@ -37,6 +37,8 @@ import AuthService from '../services/auth.service';
 import RequestService from '../components/requests/request.service';
 import StudentService from '../components/student/student.service';
 
+import { fDateTime } from '../utils/formatTime';
+
 const loggedInUser = AuthService.getCurrentUser();
 const loggedInUserRole = loggedInUser.roles;
 const loggedInUserName = loggedInUser.username;
@@ -326,7 +328,7 @@ export default function Requests() {
                               {status==0?'Pending':'Certified'}
                           </Typography>
                         </TableCell>
-                        <TableCell align="left">{createdAt}</TableCell>
+                        <TableCell align="left">{fDateTime(createdAt)}</TableCell>
                         {loggedInUserRole=='ROLE_ISSUER' && status==0 &&
                         <TableCell align="left">
                           <Link to="/dashboard/certifyDocument" 
