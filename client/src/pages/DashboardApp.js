@@ -85,7 +85,7 @@ export default function DashboardApp() {
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          ACADEMIC DOCUMENT AUTHENTICATION SYSTEM
+          ACADEMIC DOCUMENT AUTHENTICITY SYSTEM
         </Typography>
 
         <Grid container spacing={3}>
