@@ -33,6 +33,8 @@ import DocumentService from "../components/document/document.service";
 
 import AuthService from '../services/auth.service';
 
+import { fDateTime } from '../utils/formatTime';
+
 const loggedInUser = AuthService.getCurrentUser();
 const loggedInUserRole = loggedInUser.roles;
 const loggedInUserName = loggedInUser.username;
@@ -214,7 +216,7 @@ export default function Student() {
                         <TableCell align="left">{referenceId}</TableCell>
                         }
                         <TableCell align="left">{document_hash}</TableCell>
-                        <TableCell align="left">{createdAt}</TableCell>
+                        <TableCell align="left">{fDateTime(createdAt)}</TableCell>
                       </TableRow>
                     );
                   })}

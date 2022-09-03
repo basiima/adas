@@ -10,6 +10,8 @@ import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
 
+import AuthService from '../../services/auth.service';
+
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
@@ -34,6 +36,9 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
+const loggedInUser = AuthService.getCurrentUser();
+const loggedInUserRole = loggedInUser.roles
+
 // ----------------------------------------------------------------------
 
 DashboardNavbar.propTypes = {
@@ -45,15 +50,16 @@ export default function DashboardNavbar({ onOpenSidebar }) {
     <RootStyle>
       <ToolbarStyle>
         <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary', display: { lg: 'none' } }}>
-         <Iconify icon="eva:menu-2-fill" />
+          <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          {/* <LanguagePopover /> */}
+          <LanguagePopover />
+          {loggedInUserRole=='ROLE_ISSUER' &&
           <NotificationsPopover />
+          }
           <AccountPopover />
         </Stack>
       </ToolbarStyle>

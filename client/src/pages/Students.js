@@ -26,6 +26,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import StudentService from "../components/student/student.service";
 import AddStudent from "../components/student/AddStudent";
 
+import NotificationsPopover from '../layouts/dashboard/NotificationsPopover';
+
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -194,7 +196,8 @@ export default function Student() {
                     </Tooltip>
                   </Grid>
                 </DialogTitle>
-                <AddStudent />
+                <NotificationsPopover/>
+                {/* <AddStudent /> */}
               </Dialog></FormControl>
           </div>
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
