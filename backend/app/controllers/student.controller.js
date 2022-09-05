@@ -4,6 +4,20 @@ const User = db.user;
 const Op = db.Sequelize.Op;
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer"); // Require the Nodemailer package
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
+const myOAuth2Client = new OAuth2(
+  process.env.OAUTH_CLIENTID,
+  process.env.OAUTH_CLIENT_SECRET,
+  "https://developers.google.com/oauthplayground"
+)
+
+myOAuth2Client.setCredentials({
+  refresh_token: process.env.OAUTH_REFRESH_TOKEN
+}); 
+
+const myAccessToken = myOAuth2Client.getAccessToken() //retrieve new access token when it expires
 
 // Ceate and save a student 
 exports.create = (req, res) => {
@@ -76,22 +90,21 @@ exports.create = (req, res) => {
           pass: process.env.MAIL_PASSWORD,
           clientId: process.env.OAUTH_CLIENTID,
           clientSecret: process.env.OAUTH_CLIENT_SECRET,
-          refreshToken: process.env.OAUTH_REFRESH_TOKEN
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+          accessToken: myAccessToken
         },
       });
         // Send Email
       let info = await transporter.sendMail({
         from: '"ADAS Admin" <admin@adas.com>',
         to: req.body.email, // Student's email address
-        subject: "Welcome Message!",
+        subject: "ADAS Welcome Message!",
         text: "Welcome to the Academic Document Authenticity System (ADAS). Please login using the password ".concat(defaultPassword),
         html: "Welcome to the Academic Document Authenticity System (ADAS). Please login using the password ".concat(defaultPassword),
       });
-
-      console.log("View email: %s", nodemailer.getTestMessageUrl(info)); // URL to preview email
     }
+    
     sendMail().catch(console.error);
-
   };
 
 // Retrieve all students
