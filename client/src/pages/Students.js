@@ -196,8 +196,7 @@ export default function Student() {
                     </Tooltip>
                   </Grid>
                 </DialogTitle>
-                <NotificationsPopover/>
-                {/* <AddStudent /> */}
+                <AddStudent />
               </Dialog></FormControl>
           </div>
           <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
