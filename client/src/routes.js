@@ -12,7 +12,7 @@ import Requests from './pages/Requests';
 import DashboardApp from './pages/DashboardApp';
 import CertifyDocument from './pages/CertifyDocument';
 import AddRequest from './components/requests/AddRequest';
-
+import MakePayment from './components/payments/MakePayment';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +40,7 @@ export default function Router() {
         { path: 'login', element: <Login /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
+        {path: '/payment', element: <MakePayment/>}
        
         
       
