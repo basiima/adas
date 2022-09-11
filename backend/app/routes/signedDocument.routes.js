@@ -9,6 +9,6 @@ module.exports = app => {
 
     // Retrieve a single Document with referenceId
     router.get("/:id", signed_documents.findOne);
-
+    
     app.use('/api/signed_documents', router);
   };
