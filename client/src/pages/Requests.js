@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { filter } from 'lodash';
+import { sentenceCase } from 'change-case';
 import { Link, Link as RouterLink } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -116,7 +117,7 @@ export default function Requests() {
         retrieveRequests();
       // }, 50000);
     });
-  
+
     // Send request to api to retrieve requests records from the database
     const retrieveRequests = () => {
       if(loggedInUserRole=='ROLE_ISSUER'){
@@ -142,13 +143,13 @@ export default function Requests() {
             })
       }
     }
-  
+
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
     };
-  
+
     const handleSelectAllClick = (event) => {
       if (event.target.checked) {
         const newSelecteds = students.map((n) => n.student_name);
@@ -157,7 +158,7 @@ export default function Requests() {
       }
       setSelected([]);
     };
-  
+
     const handleClick = (event, student_name) => {
       const selectedIndex = selected.indexOf(student_name);
       let newSelected = [];
@@ -172,32 +173,32 @@ export default function Requests() {
       }
       setSelected(newSelected);
     };
-  
+
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
-  
+
     const handleChangeRowsPerPage = (event) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
     };
-  
+
     const handleFilterByName = (event) => {
       setFilterName(event.target.value);
     };
-  
+
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - students.length) : 0;
-  
+
     const filteredUsers = applySortFilter(students, getComparator(order, orderBy), filterName);
-  
+
     const isUserNotFound = filteredUsers.length === 0;
-  
+
     const [open, setOpen] = React.useState(false);
 
   return (
     <Page title="Requests">
     <Container  maxWidth="xl">
-      {loggedInUserRole == 'ROLE_STUDENT' && 
+      {loggedInUserRole == 'ROLE_STUDENT' &&
     <Button variant="contained" component={RouterLink} to="/dashboard/place-request">
             Place Request
     </Button>}<br/><br/>
@@ -324,15 +325,18 @@ export default function Requests() {
                         <TableCell align="left">{student_number}</TableCell>
                         <TableCell align="left">{document_type}</TableCell>
                         <TableCell align="left">
-                          <Typography style={ status == 0? {color: 'red'}:{color: 'green'}}>
+                          {/* <Typography style={ status == 0? {color: 'maroon'}:{color: 'green'}}>
                               {status==0?'Pending':'Certified'}
-                          </Typography>
+                          </Typography> */}
+                          <Label variant="ghost" color={(status === 0 && 'error') || 'success'}>
+                            {status==0?'PENDING':'CERTIFIED'}
+                          </Label>
                         </TableCell>
                         <TableCell align="left">{fDateTime(createdAt)}</TableCell>
-                        
+
                         {loggedInUserRole=='ROLE_ISSUER' && status==0 &&
                         <TableCell align="left">
-                          <Link to="/dashboard/certifyDocument" 
+                          <Link to="/dashboard/certifyDocument"
                           state={ { id:request_id, student_name: student_name, student_number: student_number, document_type: document_type } }
                           style={{ fontWeight: 'bold' }}
                           >

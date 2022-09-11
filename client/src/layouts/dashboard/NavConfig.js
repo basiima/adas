@@ -1,9 +1,43 @@
+import { useState, useEffect } from 'react';
 // component
 import Iconify from '../../components/Iconify';
 
+import RequestService from '../../components/requests/request.service';
+
+import { Badge } from '@mui/material';
+
 // ----------------------------------------------------------------------
 
+export function GetUnCertifiedRequestsCount(){
+      const [notifications, setNotifications] = useState([]);
+
+      var unCertifiedRequests = [];
+
+      useEffect(()=>{
+          retrieveRequests();
+      });
+
+      const retrieveRequests = () => {
+        RequestService.getAll()
+        .then(response => {
+          setNotifications(response.data)
+        });
+      }
+
+      notifications.map(notification => {
+        if(notification.status == 0){
+          unCertifiedRequests.push(notification)
+        }
+      })
+
+    return(
+      <Badge badgeContent={unCertifiedRequests.length} color="error"></Badge>
+    );
+}
+
 const getIcon = (name) => <Iconify icon={name} width={22} height={22} />;
+const getAdminRequestCount = (name) => <><Iconify icon={name} width={22} height={22} /><GetUnCertifiedRequestsCount/></>;
+
 
 const navConfig = [
   {
@@ -29,7 +63,7 @@ const navConfig = [
   {
     title: 'Requests',
     path: '/dashboard/requests',
-    icon: getIcon('icon-park-outline:incoming'),
+    icon: getAdminRequestCount('icon-park-outline:incoming'),
   },
   {
     title: 'Logout',
