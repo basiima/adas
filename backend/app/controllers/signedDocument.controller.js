@@ -1,5 +1,6 @@
 const db = require("../models");
 const SignedDocument = db.signed_document
+const Op = db.Sequelize.Op;
 
 // Store document details to db
 exports.create = (req, res) => {
@@ -45,3 +46,25 @@ exports.findAll = (req, res) => {
         });
       });
   };
+
+// Return a request of a specified document referenceId   
+exports.findOne = (req, res) => {
+  const referenceId = req.params.id;
+  SignedDocument.findAll({
+    where: {referenceId : { [Op.like]: `%${referenceId}%` } }
+  })
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Signed Document with referenceId=${referenceId}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Signed Document with referenceId=" + referenceId
+      });
+    });
+};

@@ -30,7 +30,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, StudentListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import DocumentListToolbar from '../sections/@dashboard/products/DocumentListToolbar'
 import DocumentService from "../components/document/document.service";
-
+import StudentService from '../components/student/student.service';
 import AuthService from '../services/auth.service';
 
 import { fDateTime } from '../utils/formatTime';
@@ -112,13 +112,29 @@ export default function Student() {
 
   // Send request to api to retrieve student records from the database
   const retrieveDocuments = () => {
+    if(loggedInUserRole=='ROLE_ISSUER'){
     DocumentService.getAll()
       .then(response => {
+        // console.log(response.data)
         setDocuments(response.data);
       })
       .catch(e => {
         console.log(e);
       });
+    }else if(loggedInUserRole=='ROLE_STUDENT'){
+      StudentService.get(loggedInUserName)
+      .then(response => {
+        DocumentService.get(response.data.student_number)
+        .then(response =>{
+          setDocuments(response.data);
+          //console.log(response.data);
+        })
+          //console.log(response.data.student_number);
+      })
+      .catch(e =>{
+        console.log(e);
+      })
+    }
   }
 
   const handleRequestSort = (event, property) => {
