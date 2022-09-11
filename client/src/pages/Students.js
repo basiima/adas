@@ -27,6 +27,13 @@ import StudentService from "../components/student/student.service";
 import AddStudent from "../components/student/AddStudent";
 
 import NotificationsPopover from '../layouts/dashboard/NotificationsPopover';
+import Alert from "@mui/material/Alert";
+
+import axios from "axios";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Progress } from 'reactstrap';
 
 // components
 import Page from '../components/Page';
@@ -162,6 +169,15 @@ export default function Student() {
   const isUserNotFound = filteredUsers.length === 0;
 
   const [open, setOpen] = React.useState(false);
+  const [openDialog,setOpenDialog] = useState(false);
+
+  const handleDialogClickOpen = () => {
+    setOpenDialog(true);
+  }
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -170,6 +186,52 @@ export default function Student() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loaded, setLoaded] = useState(null);
+
+  const checkMimeType = (event) => {
+    let files = event.target.files
+    let err = []
+    const types = ['text/csv']
+
+    for (var x = 0; x < files.length; x++) {
+      if (types.every(type => files[x].type !== type)) {
+        err[x] = 'Unpload CSV format';
+      }
+    };
+
+    // Displaying error message in react Toast component
+    for (var z = 0; z < err.length; z++) {
+      event.target.value = null
+      toast.error(err[z])
+    }
+    return true;
+
+  }
+
+  const onChangeHandler = event => {
+    var files = event.target.files
+
+    if (checkMimeType(event)) {
+      setSelectedFile(event.target.files[0]);
+    }
+    console.log(event.target.files[0])
+    }
+
+  const onClickHandler = () => {
+    const data = new FormData()
+    data.append('file', selectedFile);
+
+    axios.post("http://localhost:8080/uploadStudents", data, {
+      onUploadProgress: ProgressEvent => {
+        setLoaded((ProgressEvent.loaded / ProgressEvent.total * 100));
+      },
+    })
+    .then(res => {
+      toast.success('Upload success', { delay:2000 });
+    })
+  }
 
   return (
     <Page title="Students">
@@ -199,9 +261,49 @@ export default function Student() {
                 <AddStudent />
               </Dialog></FormControl>
           </div>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" onClick={handleDialogClickOpen} startIcon={<Iconify icon="eva:plus-fill" />}>
             Upload CSV
           </Button>
+          <FormControl>
+              <Dialog open={openDialog} onClose={handleDialogClose}>
+                <DialogTitle>
+                  <Grid container justify="space-between">
+                    <Typography variant="div">
+                      Upload CSV
+                    </Typography>
+                    <Tooltip title="Close Form">
+                      <IconButton onClick={() => setOpenDialog(false)} style={{ marginLeft: '350px' }} variant="container">
+                        <CloseIcon color='error' />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </DialogTitle>
+                <DialogContent style={{width: 600}}>
+                <form action="/upload" method="post" encType="multipart/form-data">
+                <div className="container">
+                  <div className="row">
+                    <div className="offset-md-3 col-md-6">
+                    <Alert severity="info"><Typography><b>Supported file formats</b>: csv *only</Typography></Alert>
+                    <br/>
+                      <div className="form-group files">
+                        <label>Upload File </label>
+                        <input type="file" name="file" className="form-control" onChange={onChangeHandler} required={true}/><br/>
+                      </div>
+                      <div className="form-group">
+                        <br />
+                        <ToastContainer />
+                        <Progress max="100" color="success" value={loaded}>{Math.round(loaded, 2)}%</Progress>
+                      </div>
+                      <br/>
+                      <div>
+                        <button type="button" className="btn btn-primary btn-block" disabled={ selectedFile == null ? true: false } onClick={onClickHandler}>Upload</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </form>
+                </DialogContent>
+              </Dialog></FormControl>
         </Stack>
 
         <Card>
@@ -283,5 +385,3 @@ export default function Student() {
     </Page>
   );
 }
-
-
