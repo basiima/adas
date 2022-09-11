@@ -10,6 +10,9 @@ class DocumentService {
       return http.get("/signed_documents");
     }
     
+    static get(referenceId) {
+      return http.get(`/signed_documents/${referenceId}`);
+    }
     
   }
 export default DocumentService;
