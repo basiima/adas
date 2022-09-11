@@ -30,7 +30,7 @@ export default function CertifyDocument() {
   const student_name = location.state.student_name;
   const referenceId = location.state.student_number;
   const request_id = location.state.id;
-  
+
   const [stRef, setRef] = useState(referenceId);
   const [stName, setStName] = useState(student_name);
   const [reqId, setReqId] = useState(request_id);
@@ -45,19 +45,69 @@ export default function CertifyDocument() {
   // progress
   const [percent, setPercent] = useState(0);
 
+  /** Checking the file type
+ *  Supported formats for ADAS are images[png, jpeg] & files[pdf]
+ */
+const checkMimeType = (event) => {
+  let files = event.target.files
+  let err = []
+  const types = ['image/png', 'image/jpeg', 'application/pdf', 'application/doc']
+
+  for (var x = 0; x < files.length; x++) {
+    if (types.every(type => files[x].type !== type)) {
+      err[x] = 'Unsupported file format\n\nUpload formats of: images(png, jpeg), pdf';
+    }
+  };
+
+  // Displaying error message in react Toast component
+  for (var z = 0; z < err.length; z++) {
+    event.target.value = null
+    toast.error(err[z])
+  }
+  return true;
+
+}
+
+/** Checking the maximum file upoad size
+ *  The maximum upload size is set to 2MB
+ */
+const checkFileSize = (event) => {
+  let files = event.target.files
+  let size = 2000000
+  let err = [];
+
+  for (var x = 0; x < files.length; x++) {
+    if (files[x].size > size) {
+      err[x] = 'File is too large, Max size is 2MB\n';
+    }
+  };
+
+  // Displaying error message in react Toast component
+  for (var z = 0; z < err.length; z++) {
+    toast.error(err[z])
+    event.target.value = null
+  }
+
+  return true;
+
+}
+
   // Handle file upload event and update state
   function handleChange(event) {
-    setFile(event.target.files[0]);
-    setFileURL(URL.createObjectURL(event.target.files[0]));
+    if (checkMimeType(event) && checkFileSize(event)) {
+      setFile(event.target.files[0]);
+      console.log(event.target.files[0])
+      setFileURL(URL.createObjectURL(event.target.files[0]));
+    }
   }
 
   const handleUpload = () => {
 
     const storageRef = ref(storage, `/files/${file.name}`);
-    
+
     const file_name = file.name
     const document_hash = SHA(file_name).toString();
- 
+
     // progress can be paused and resumed. It also exposes progress updates.
     // Receives the storage reference and the file to upload.
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -96,7 +146,7 @@ export default function CertifyDocument() {
                 const percent = Math.round(
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
- 
+
                 // update progress
                 setPercent(percent);
             },
