@@ -67,7 +67,7 @@ const navConfig = [
   },
   {
     title: 'Logout',
-    path: '/login',
+    path: '/logout',
     icon: getIcon('ri:logout-circle-r-fill'),
   },
 ];
@@ -85,7 +85,7 @@ const companyNavConfig = [
   },
   {
     title: 'Logout',
-    path: '/login',
+    path: '/logout',
     icon: getIcon('ri:logout-circle-r-fill'),
   },
 ]
@@ -108,7 +108,7 @@ const studentNavConfig = [
   },
   {
     title: 'Logout',
-    path: '/login',
+    path: '/logout',
     icon: getIcon('ri:logout-circle-r-fill'),
   },
 ]
