@@ -150,6 +150,7 @@ const checkFileSize = (event) => {
       const contract = new ethers.Contract(certificationAddress, Certify.abi, signer);
       const transaction = await contract.setCertificationDetails(stName, verName, doc_type, docKey, stRef);
       console.log("Transaction details: ",transaction);
+      toast.success(`Blockchain transaction success\n\n at id:\n\n ${transaction.hash}`, { delay:3000 });
 
       /** Storing the transaction details in the database */
      // const certificationHash = transaction.hash;
