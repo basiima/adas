@@ -197,7 +197,7 @@ export default function Student() {
 
     for (var x = 0; x < files.length; x++) {
       if (types.every(type => files[x].type !== type)) {
-        err[x] = 'Unpload CSV format';
+        err[x] = 'Upload CSV format';
       }
     };
 

@@ -65,20 +65,20 @@ export default function Login() {
     <Page title="Login">
       <RootStyle>
         <HeaderStyle>
+            <a href="/" style={{ textDecoration: 'none' }}>
+              Home
+            </a>
         </HeaderStyle>
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
-            </Typography>
-            <img src="/static/illustrations/illustration_login.png" alt="login" />
+            <img src="/static/illustrations/login.png" alt="login" />
           </SectionStyle>
         )}
 
         <Container maxWidth="sm">
           <ContentStyle>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h3" gutterBottom>
               Sign in to ADAS
             </Typography>
 
