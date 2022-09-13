@@ -12,6 +12,8 @@ import { useLocation, Link as RouterLink, useNavigate } from "react-router-dom";
 
 import RequestService from "../components/requests/request.service";
 import DocumentService from "../components/document/document.service";
+import BlockChainRecordService from "../components/blockchain-records/blockchain-records.service";
+import StudentService from "../components/student/student.service";
 
 import storage from '../firebaseconfig';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
@@ -20,9 +22,15 @@ import Slide from '@mui/material/Slide';
 
 import SHA from 'crypto-js/sha256';
 
+import { ethers } from "ethers";
+import Certify from '../artifacts/contracts/Certify.sol/Certify.json';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+// Contract deployment Address
+const certificationAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 export default function CertifyDocument() {
   const navigate = useNavigate();
@@ -30,6 +38,22 @@ export default function CertifyDocument() {
   const student_name = location.state.student_name;
   const referenceId = location.state.student_number;
   const request_id = location.state.id;
+  const document_type = location.document_type;
+  const [student_email, setStudentEmail] = useState('');
+
+  StudentService.getAll()
+  .then(response => {
+    // console.log(response.data);
+    response.data.forEach(el => {
+      if(el.student_number == referenceId){
+        setStudentEmail(el.email);
+        console.log(student_email);
+      }
+    })
+  })
+  .catch(e =>{
+    console.log(e);
+  })
 
   const [stRef, setRef] = useState(referenceId);
   const [stName, setStName] = useState(student_name);
@@ -101,6 +125,51 @@ const checkFileSize = (event) => {
     }
   }
 
+  /** Makes a call to MetaMask to handle the gas fees for the transaction */
+  async function requestAccount(){
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+  }
+
+  /** Implementation of the certifyDocument function that makes a call to the
+   *  smart contract that stores the verification details to the blockchain
+   */
+  async function certifyDocument(hashValue){
+    const stName = student_name;
+    const verName = "Mak Admin";
+    const doc_type = docType;
+    const docKey = 'ADASKY'.concat(hashValue);
+    const stRef = referenceId;
+    const txnID = 'TXN'.concat(stRef).concat(Math.random().toString(36).substring(2,6).toUpperCase());
+
+    if(typeof window.ethereum !== 'undefined'){
+      await requestAccount();
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(certificationAddress, Certify.abi, signer);
+      const transaction = await contract.setCertificationDetails(stName, verName, doc_type, docKey, stRef);
+      console.log("Transaction details: ",transaction);
+
+      /** Storing the transaction details in the database */
+     // const certificationHash = transaction.hash;
+
+    //  setGenDocKey(doc_key);
+      const certificationData = {
+        transactionId: txnID,
+        documentKey: docKey,
+        student_email: student_email
+      }
+
+      BlockChainRecordService.create(certificationData)
+      .then(res => {
+        console.log(res.data);
+      })
+     //await transaction.wait();
+     //fetchCertificationStatus();
+  }
+  }
+
   const handleUpload = () => {
 
     const storageRef = ref(storage, `/files/${file.name}`);
@@ -118,10 +187,16 @@ const checkFileSize = (event) => {
       referenceId: referenceId
     }
 
+    // certifyDocument(
+    //   student_name, "Mak Admin",
+    //   docType, genDocKey,
+    //   referenceId, document_hash
+    // );
+
     DocumentService.create(document_data)
       .then(response => {
         setDocHashValue(response.data.document_hash);
-          console.log(response.data)
+        certifyDocument(response.data.document_hash);
           RequestService.get(response.data.referenceId)
           .then(response =>{
               var data = {
@@ -137,8 +212,12 @@ const checkFileSize = (event) => {
               })
           })
       }).catch(e => {
-                console.log(e);
-            });
+          console.log(e);
+      });
+
+      /** Calling and passing arguments to the certifyDocument() function which makes a call to the smart contract
+       *  that stores the certification details to the blockchain
+       */
 
     uploadTask.on(
       "state_changed",

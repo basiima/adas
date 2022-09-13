@@ -7,7 +7,7 @@ import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
 import Logo from '../components/Logo';
-import VerificationPayment from 'src/components/payments/VerificationPayment';
+//import VerificationPayment from 'src/components/payments/VerificationPayment';
 import AuthService from '../services/auth.service';
 
 const loggedInUser = AuthService.getCurrentUser();
@@ -96,7 +96,7 @@ export default function Home() {
                     Verify Document
               </Button>
             </a> */}
-              <VerificationPayment />
+              {/* <VerificationPayment /> */}
 
           </ContentStyle>
         </Container>
