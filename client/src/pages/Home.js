@@ -9,7 +9,16 @@ import useResponsive from '../hooks/useResponsive';
 import Page from '../components/Page';
 import Logo from '../components/Logo';
 import AuthService from '../services/auth.service';
+import PaymentService from '../components/payments/payment.service';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { ethers } from "ethers";
+import Certify from '../artifacts/contracts/Certify.sol/Certify.json';
+
+const certifyAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 const loggedInUser = AuthService.getCurrentUser();
 const loggedInUserRole = loggedInUser.roles;
@@ -56,12 +65,34 @@ export default function Home() {
   const payment_amount = 50000;
   const [payer_email, setPayerEmail] = useState('');
   const [is_valid_email, setEmailValidity] = useState(true);
+  const [verificationStatus, setVerificationStatus] = useState('');
 
   const onChangeEmail = (e) => {
        setPayerEmail(e.target.value);
        setEmailValidity(payer_email.includes("@"));
        //console.log(payer_email);
   };
+
+  async function fetchCertificationStatus() {
+   // if(!doc_key) return;
+    if(typeof window.ethereum !== 'undefined'){
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const contract = new ethers.Contract(certifyAddress, Certify.abi, provider);
+        try{
+            const data = await contract.get(doc_key);
+            if(data[0]== true){
+              toast.success('Document Key exists', { delay:3000 });
+             
+            }else if(data[0]==false){
+              toast.error('Document Key doesnot exist', { delay:3000 });
+            }
+        }catch(error){
+            console.log("Error: ", error);
+        }
+
+        setDocumentKey('');
+    }
+  }
 
   const config = {
     public_key: 'FLWPUBK_TEST-8eb30e705ff0747460fff4be236afcd5-X',
@@ -90,7 +121,9 @@ export default function Home() {
   const verifyTransaction = (payment_data) => {
     console.log(payment_data);
     if (payment_data.status === 'successful') {
-      PaymentService.create(payment_data).then().catch(e => {
+      PaymentService.create(payment_data).then(
+        fetchCertificationStatus()
+      ).catch(e => {
         toast.error('Request failed !');
         console.log(e.response.data);
       });
@@ -159,8 +192,8 @@ export default function Home() {
             {!is_valid_email &&
             <span style={{ color: 'red' }}>Please enter a valid Email with "@"</span>
             }
-            
-            <Button variant="contained" sx={{ mt: 4}} 
+            <ToastContainer />
+            <Button variant='contained' sx={{ mt: 4 }}
               onClick={() => {
                 handleFlutterPayment({
                   callback: (response) => {
@@ -169,13 +202,14 @@ export default function Home() {
                       //closePaymentModal() // this will close the modal programmatically
                   },
                   onClose: () => {
-                    window.location.href = "/verification-success";
+                   // document.write("<div class='card'><div>"+{verificationStatus}+"</div></div>");
+                   window.location.href = "/verification-success";
                   },
                 });
               }}>
             Verify Document
             </Button>
-
+          
           </ContentStyle>
         </Container>
       </RootStyle>
