@@ -10,6 +10,7 @@ import Page from '../components/Page';
 import Logo from '../components/Logo';
 import AuthService from '../services/auth.service';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import PaymentService from '../components/payments/payment.service';
 
 const loggedInUser = AuthService.getCurrentUser();
 const loggedInUserRole = loggedInUser.roles;
