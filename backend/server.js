@@ -58,6 +58,7 @@ require('./app/routes/student.routes')(app);
 require('./app/routes/company.routes')(app);
 require('./app/routes/signedDocument.routes')(app);
 require('./app/routes/studentRequest.routes')(app);
+require('./app/routes/payment.routes')(app);;
 require('./app/routes/verificationTransaction.routes')(app);
 require('./app/routes/blockChainRecord.routes')(app);
 

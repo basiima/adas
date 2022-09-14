@@ -30,6 +30,7 @@ db.student = require("../models/student.model.js")(sequelize, Sequelize);
 db.company = require("../models/company.model.js")(sequelize, Sequelize);
 db.signed_document = require("../models/signedDocument.model")(sequelize, Sequelize);
 db.student_request = require("../models/studentRequest.model")(sequelize, Sequelize);
+db.payment_record = require("../models/payment.model")(sequelize, Sequelize);
 db.verification_transaction = require("../models/verificationTransaction.model")(sequelize, Sequelize);
 db.blockchain_record = require("../models/blockChainRecord.model")(sequelize, Sequelize);
 

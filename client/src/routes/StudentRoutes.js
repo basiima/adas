@@ -8,6 +8,8 @@ import NotFound from '../pages/Page404';
 import Home from '../pages/Home';
 import Requests from '../pages/Requests';
 import DashboardApp from '../pages/DashboardApp';
+import VerificationSuccess from '../pages/VerificationSuccess';
+
 import AddRequest from '../components/requests/AddRequest';
 import Logout from '../components/Logout';
 
@@ -31,6 +33,7 @@ export default function StudentRouter() {
       children: [
         { path: '/', element: <Home  />},
         { path: 'home', element: <Home /> },
+        { path: 'verification-success', element: <VerificationSuccess />},
         { path: 'logout', element: <Logout /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },

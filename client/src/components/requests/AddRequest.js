@@ -13,14 +13,17 @@ import { Button } from '@mui/material';
 import AuthService from '../../services/auth.service';
 import RequestService from './request.service';
 import StudentService from "../student/student.service";
+import PaymentService from "../payments/payment.service";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
 function AddRequest(){
     const loggedInUser = AuthService.getCurrentUser();
     const avatarInitial = loggedInUser.username.charAt(0).toUpperCase();
-  //  console.log(loggedInUser);
+  //  console.log(loggedInUser);  
+    const loggedInUserEmail = loggedInUser.email;
     const loggedInUserName = loggedInUser.username;
    // console.log(loggedInUserName);
     const navigate = useNavigate();
@@ -28,6 +31,27 @@ function AddRequest(){
     const [student_name, setStudentName] = useState('');
     const [student_number, setStudentNumber] = useState('');
     const [document_type, setDocumentType] = useState('');
+
+    const payment_amount = 30000;
+
+    const config = {
+      public_key: 'FLWPUBK_TEST-8eb30e705ff0747460fff4be236afcd5-X',
+      //public_key: 'FLWPUBK-5dd887f7383cad01a73bbc769ed0f96b-X',
+      tx_ref: Date.now(),
+      amount: payment_amount,
+      currency: 'UGX',
+      payment_options: 'mobilemoneyuganda',
+      customer: {
+        email: loggedInUserEmail,
+        name: loggedInUserName,
+      },
+      customizations: {
+        title: 'ADAS Payments | Document Certification',
+        logo: 'https://i.ibb.co/MPVR8G1/logo-svg.png',
+      },
+    };
+
+    const handleFlutterPayment = useFlutterwave(config);
 
       // Trigger retrieve students function on load up
     useEffect(()=>{
@@ -66,6 +90,17 @@ function AddRequest(){
             toast.error('Request failed !')
             console.log(e);
         });
+    };
+
+    const verifyTransaction = (payment_data) => {
+      console.log(payment_data);
+      if (payment_data.status === 'successful') {
+        PaymentService.create(payment_data).then().catch(e => {
+          toast.error('Request failed !');
+          console.log(e.response.data);
+        });
+        placeRequest();
+      }
     };
 
     // Setting current date 
@@ -119,7 +154,19 @@ function AddRequest(){
           </Typography>
         </CardContent>
         <CardActions disableSpacing sx={ {marginLeft: 23} }>
-            <Button variant='contained' onClick={placeRequest}>
+            <Button variant='contained' 
+              onClick={() => {
+                handleFlutterPayment({
+                  callback: (response) => {
+                    let payment_data = response;
+                    verifyTransaction(payment_data);
+                      //closePaymentModal() // this will close the modal programmatically
+                  },
+                  onClose: () => {
+                    window.location.href = "/dashboard/requests";
+                  },
+                });
+              }}>
                 Place Request
             </Button>
         </CardActions>

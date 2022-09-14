@@ -1,14 +1,15 @@
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Card, Link, Container, Typography, Button } from '@mui/material';
+import { Card, Link, Container, Typography, Button, TextField } from '@mui/material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
 import Logo from '../components/Logo';
-//import VerificationPayment from 'src/components/payments/VerificationPayment';
 import AuthService from '../services/auth.service';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
 const loggedInUser = AuthService.getCurrentUser();
 const loggedInUserRole = loggedInUser.roles;
@@ -49,6 +50,52 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Home() {
+  const [doc_key, setDocumentKey] = useState('');
+  const [is_valid_docKey, setKeyValidility] = useState(true);
+
+  const payment_amount = 50000;
+  const [payer_email, setPayerEmail] = useState('');
+  const [is_valid_email, setEmailValidity] = useState(true);
+
+  const onChangeEmail = (e) => {
+       setPayerEmail(e.target.value);
+       setEmailValidity(payer_email.includes("@"));
+       //console.log(payer_email);
+  };
+
+  const config = {
+    public_key: 'FLWPUBK_TEST-8eb30e705ff0747460fff4be236afcd5-X',
+    //public_key: 'FLWPUBK-5dd887f7383cad01a73bbc769ed0f96b-X',
+    tx_ref: Date.now(),
+    amount: payment_amount,
+    currency: 'UGX',
+    payment_options: 'mobilemoneyuganda',
+    customer: {
+      email: payer_email,
+    },
+    customizations: {
+      title: 'ADAS Payments | Document Verification',
+      logo: 'https://i.ibb.co/MPVR8G1/logo-svg.png',
+    },
+  };
+
+  const handleFlutterPayment = useFlutterwave(config);
+
+  const onChangeDocumentKey = event => {
+    setDocumentKey(event.target.value);
+    setKeyValidility(doc_key.length >= 30);
+    //console.log(is_valid_docKey);
+  }
+
+  const verifyTransaction = (payment_data) => {
+    console.log(payment_data);
+    if (payment_data.status === 'successful') {
+      PaymentService.create(payment_data).then().catch(e => {
+        toast.error('Request failed !');
+        console.log(e.response.data);
+      });
+    }
+  };
 
   return (
     <Page title="Home | ADAS">
@@ -59,7 +106,7 @@ export default function Home() {
             </a>            
             {loggedInUserRole == null && 
               <a href="/login" style={{ textDecoration: 'none' }}>
-                Signin
+                Login
               </a>  
             }            
             {loggedInUserRole != null && 
@@ -87,16 +134,47 @@ export default function Home() {
 
             <form method="post" action="">
                 <div className="row">
-                    <input type="text" name="document_key" className="form-control" required={true}placeholder="Enter document key" />      
+                    <input type="text" name="document_key" className="form-control" required={true}
+                    placeholder="Enter document key" 
+                    value={doc_key}
+                    onChange={onChangeDocumentKey}/>      
                 </div>
             </form>
                 
-            {/* <a href="/payment" style={{textDecoration: 'none'}}>
-              <Button variant="contained" sx={{ mt: 4}}>
-                    Verify Document
-              </Button>
-            </a> */}
-              {/* <VerificationPayment /> */}
+            {!is_valid_docKey &&
+            <span style={{ color: 'red' }}>Please enter a valid document key</span>
+            }
+            
+            <TextField
+            margin="dense"
+            id="email"
+            label="Your Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+            value={payer_email}
+            onChange={onChangeEmail}
+            />
+            
+            {!is_valid_email &&
+            <span style={{ color: 'red' }}>Please enter a valid Email with "@"</span>
+            }
+            
+            <Button variant="contained" sx={{ mt: 4}} 
+              onClick={() => {
+                handleFlutterPayment({
+                  callback: (response) => {
+                    let payment_data = response;
+                    verifyTransaction(payment_data);
+                      //closePaymentModal() // this will close the modal programmatically
+                  },
+                  onClose: () => {
+                    window.location.href = "/verification-success";
+                  },
+                });
+              }}>
+            Verify Document
+            </Button>
 
           </ContentStyle>
         </Container>

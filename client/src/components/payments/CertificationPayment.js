@@ -6,19 +6,13 @@ import AuthService from '../../services/auth.service';
 //import RequestService from './request.service';
 import StudentService from "../student/student.service";
 
-export default function MakePayment() {
+export default function CertificationPayment() {
   const loggedInUser = AuthService.getCurrentUser();
   const loggedInUserRole = loggedInUser.roles;  
   const loggedInUserEmail = loggedInUser.email;
   const loggedInUserName = loggedInUser.username;
 
-  let payment_amount = 0;
-
-  if(loggedInUserRole == 'ROLE_STUDENT'){
-    payment_amount = 30000;
-  } else {
-    payment_amount = 50000;
-  }
+  const payment_amount = 30000;
 
   const config = {
     public_key: 'FLWPUBK_TEST-8eb30e705ff0747460fff4be236afcd5-X',
@@ -32,18 +26,14 @@ export default function MakePayment() {
       name: loggedInUserName,
     },
     customizations: {
-      title: 'my Payment Title',
-      description: 'Payment for items in cart',
-      logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+      title: 'ADAS Payments | Document Certification',
+      logo: 'https://i.ibb.co/MPVR8G1/logo-svg.png',
     },
   };
 
   const handleFlutterPayment = useFlutterwave(config);
 
   return (
-    <div className="App">
-     <h1>Hello Test user</h1>
-
       <button
         onClick={() => {
           handleFlutterPayment({
@@ -57,6 +47,5 @@ export default function MakePayment() {
       >
          Make Payment
       </button>
-    </div>
   );
 }
