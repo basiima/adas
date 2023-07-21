@@ -22,7 +22,8 @@ import Slide from '@mui/material/Slide';
 
 import SHA from 'crypto-js/sha256';
 
-import { ethers } from "ethers";
+//import { ethers } from "ethers";
+const { ethers } = require("ethers");
 import Certify from '../artifacts/contracts/Certify.sol/Certify.json';
 
 const Transition = React.forwardRef(function Transition(props, ref) {

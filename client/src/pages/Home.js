@@ -11,12 +11,12 @@ import Logo from '../components/Logo';
 import AuthService from '../services/auth.service';
 import PaymentService from '../components/payments/payment.service';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
-import PaymentService from '../components/payments/payment.service';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
+const { ethers } = require("ethers");
 import Certify from '../artifacts/contracts/Certify.sol/Certify.json';
 
 const certifyAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
